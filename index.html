@@ -694,16 +694,221 @@ main { margin-left: 260px; }
 /* ══════════════════════════════════════
    RESPONSIVE
    ══════════════════════════════════════ */
+/* ══════════════════════════════════════
+   CLICKABLE CARDS
+   ══════════════════════════════════════ */
+.exhibit-card[data-article], .retro-card[data-article] {
+  cursor: pointer;
+}
+.exhibit-card[data-article]::after, .retro-card[data-article]::after {
+  content: 'READ MORE →';
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  margin-top: 1.2rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.exhibit-card[data-article]:hover::after, .retro-card[data-article]:hover::after {
+  opacity: 0.5;
+}
+/* Type badge */
+.card-type {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: 2px;
+  margin-bottom: 0.75rem;
+}
+.card-type.book { background: rgba(232,116,59,0.2); color: #e8743b; }
+.card-type.film { background: rgba(74,144,217,0.2); color: #4a90d9; }
+.card-type.tv { background: rgba(180,74,255,0.2); color: #b44aff; }
+.card-type.play { background: rgba(0,204,68,0.2); color: #00cc44; }
+.card-type.art { background: rgba(255,74,141,0.2); color: #ff4a8d; }
+.card-type.tech { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.7); }
+/* Light card type badges */
+.exhibit-card.light .card-type.book { background: rgba(232,116,59,0.12); }
+.exhibit-card.light .card-type.film { background: rgba(74,144,217,0.12); }
+.exhibit-card.light .card-type.tv { background: rgba(180,74,255,0.12); }
+.exhibit-card.light .card-type.art { background: rgba(255,74,141,0.12); }
+.exhibit-card.light .card-type.tech { background: rgba(0,0,0,0.06); color: #666; }
+
+/* ══════════════════════════════════════
+   ARTICLE MODAL
+   ══════════════════════════════════════ */
+.article-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  backdrop-filter: blur(4px);
+}
+.article-overlay.open { opacity: 1; visibility: visible; }
+.article-panel {
+  position: fixed;
+  top: 0; right: 0;
+  width: 560px;
+  max-width: 100%;
+  height: 100vh;
+  background: #111;
+  color: #e0e0e0;
+  z-index: 2001;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-overflow-scrolling: touch;
+}
+.article-panel.open { transform: translateX(0); }
+.article-close {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 2rem;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  z-index: 1;
+}
+.article-close .back-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.7);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+.article-close .back-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+.article-close .article-type-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  opacity: 0.5;
+}
+.article-body {
+  padding: 2.5rem 2rem 4rem;
+}
+.article-body .article-icon { font-size: 3rem; margin-bottom: 1.5rem; display: block; }
+.article-body .article-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.5rem;
+}
+.article-body .article-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+.article-body .article-creator {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 2rem;
+}
+.article-body .article-divider {
+  width: 40px;
+  height: 2px;
+  background: rgba(255,255,255,0.2);
+  margin: 2rem 0;
+}
+.article-body .article-text p {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 1.25rem;
+}
+.article-body .article-text p:last-child { margin-bottom: 0; }
+.article-body .article-quote {
+  border-left: 2px solid rgba(255,255,255,0.2);
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: rgba(255,255,255,0.6);
+}
+.article-body .article-related {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.article-body .article-related h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.75rem;
+}
+.article-body .article-related ul {
+  list-style: none;
+  padding: 0;
+}
+.article-body .article-related li {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  padding: 0.3rem 0;
+}
+body.modal-open { overflow: hidden; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE — ENHANCED MOBILE
+   ══════════════════════════════════════ */
 @media (max-width: 640px) {
   .section-inner { padding: 4rem 1.25rem; }
   .exhibit-card { padding: 1.5rem; }
   .retro-card { flex: 0 0 260px; padding: 1.5rem; }
   .gallery-title { margin-bottom: 0.75rem; }
   .theme-block { padding: 1.5rem; }
+  /* Mobile: always show read more hint */
+  .exhibit-card[data-article]::after, .retro-card[data-article]::after { opacity: 0.4; }
+  /* Full-width article panel */
+  .article-panel { width: 100%; }
+  .article-body { padding: 2rem 1.25rem 3rem; }
+  .article-close { padding: 1rem 1.25rem; }
+  .article-body .article-title { font-size: 1.5rem; }
+  /* Larger touch targets */
+  .hamburger { width: 48px; height: 48px; }
+  nav#main-nav .nav-links a { padding: 0.85rem 1.5rem; font-size: 0.85rem; }
+  .scroll-hint { font-size: 0.6rem; }
+  #entrance h1 { font-size: clamp(2rem, 10vw, 3rem); }
+  #entrance .hero-tagline { font-size: clamp(0.9rem, 4vw, 1.2rem); }
+  #entrance .curatorial { font-size: 0.85rem; }
+}
+@media (max-width: 380px) {
+  .section-inner { padding: 3rem 1rem; }
+  .gallery-title { font-size: 1.6rem; }
+  .article-body { padding: 1.5rem 1rem 2rem; }
 }
 </style>
 </head>
 <body>
+
+<!-- ══════════════════════════════════════
+     ARTICLE MODAL
+     ══════════════════════════════════════ -->
+<div class="article-overlay" id="article-overlay"></div>
+<div class="article-panel" id="article-panel">
+  <div class="article-close">
+    <button class="back-btn" id="article-close-btn">← BACK</button>
+    <span class="article-type-badge" id="article-type-badge"></span>
+  </div>
+  <div class="article-body" id="article-body"></div>
+</div>
 
 <!-- ══════════════════════════════════════
      NAVIGATION
@@ -798,9 +1003,10 @@ main { margin-left: 260px; }
         </p>
       </div>
 
-      <div class="grid-3" style="margin-top: 3rem;">
-        <div class="exhibit-card reveal">
+      <div class="grid-4" style="margin-top: 3rem;">
+        <div class="exhibit-card reveal" data-article="frankenstein">
           <span class="card-icon">⚡</span>
+          <span class="card-type book">BOOK</span>
           <p class="card-year mono">1818</p>
           <h3 class="card-title">Frankenstein</h3>
           <p class="card-creator">Mary Shelley</p>
@@ -810,24 +1016,38 @@ main { margin-left: 260px; }
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
-          <span class="card-icon">⚙</span>
-          <p class="card-year mono">1920</p>
-          <h3 class="card-title">R.U.R. (Rossum's Universal Robots)</h3>
-          <p class="card-creator">Karel Čapek</p>
+        <div class="exhibit-card reveal" data-article="erewhon">
+          <span class="card-icon">📖</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono">1872</p>
+          <h3 class="card-title">Erewhon</h3>
+          <p class="card-creator">Samuel Butler</p>
           <p class="card-desc">
-            The play that gave us the word "robot" — from the Czech <em>robota</em>, meaning forced labor.
-            Čapek's synthetic workers revolt, but also learn to love, blurring the line between machine and soul.
+            Decades before computers existed, Butler imagined machines evolving consciousness through
+            Darwinian selection — and a society that destroyed all technology in response.
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="rur">
+          <span class="card-icon">⚙</span>
+          <span class="card-type play">PLAY</span>
+          <p class="card-year mono">1920</p>
+          <h3 class="card-title">R.U.R.</h3>
+          <p class="card-creator">Karel Čapek</p>
+          <p class="card-desc">
+            The play that gave us the word "robot" — from the Czech <em>robota</em>, meaning forced labor.
+            Čapek's synthetic workers revolt, but also learn to love.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal" data-article="metropolis">
           <span class="card-icon">✦</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono">1927</p>
           <h3 class="card-title">Metropolis</h3>
           <p class="card-creator">Fritz Lang</p>
           <p class="card-desc">
-            The Machine-Man — cinema's first robot. Part idol, part weapon, the Maschinenmensch
+            The Machine-Man — cinema's first robot. The Maschinenmensch
             embodied the era's anxieties about industrialization and the dehumanization of labor.
           </p>
         </div>
@@ -853,9 +1073,10 @@ main { margin-left: 260px; }
         </p>
       </div>
 
-      <div class="grid-4" style="margin-top: 3rem;">
-        <div class="exhibit-card reveal">
+      <div class="grid-3" style="margin-top: 3rem;">
+        <div class="exhibit-card reveal" data-article="irobot">
           <span class="card-icon">🤖</span>
+          <span class="card-type book">BOOK</span>
           <p class="card-year mono">1950</p>
           <h3 class="card-title">I, Robot</h3>
           <p class="card-creator">Isaac Asimov</p>
@@ -865,8 +1086,9 @@ main { margin-left: 260px; }
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="2001">
           <span class="card-icon">◉</span>
+          <span class="card-type film">FILM / BOOK</span>
           <p class="card-year mono">1968</p>
           <h3 class="card-title">2001: A Space Odyssey</h3>
           <p class="card-creator">Stanley Kubrick & Arthur C. Clarke</p>
@@ -876,25 +1098,51 @@ main { margin-left: 260px; }
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="colossus">
           <span class="card-icon">⬡</span>
+          <span class="card-type book">BOOK</span>
           <p class="card-year mono">1966</p>
-          <h3 class="card-title">Colossus: The Forbin Project</h3>
+          <h3 class="card-title">Colossus</h3>
           <p class="card-creator">D.F. Jones</p>
           <p class="card-desc">
             A defense supercomputer gains sentience and seizes control — one of the earliest
-            "superintelligence takeover" narratives, chillingly matter-of-fact in its execution.
+            "superintelligence takeover" narratives, chillingly matter-of-fact.
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="androids">
           <span class="card-icon">🐑</span>
+          <span class="card-type book">BOOK</span>
           <p class="card-year mono">1968</p>
           <h3 class="card-title">Do Androids Dream of Electric Sheep?</h3>
           <p class="card-creator">Philip K. Dick</p>
           <p class="card-desc">
             Dick's masterwork asks: if empathy is what makes us human, and androids can learn empathy,
             then what exactly are we protecting when we "retire" them?
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal" data-article="moon">
+          <span class="card-icon">🌙</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono">1966</p>
+          <h3 class="card-title">The Moon Is a Harsh Mistress</h3>
+          <p class="card-creator">Robert A. Heinlein</p>
+          <p class="card-desc">
+            MIKE, a lunar supercomputer, achieves sentience and helps foment revolution —
+            one of science fiction's first sympathetic AI protagonists who chooses friendship with humanity.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal" data-article="cyberiad">
+          <span class="card-icon">🔧</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono">1965</p>
+          <h3 class="card-title">The Cyberiad</h3>
+          <p class="card-creator">Stanisław Lem</p>
+          <p class="card-desc">
+            Lem's playful fables of robot constructors who build entire civilizations explore AI
+            through wit and philosophy — machines as cosmic comedians and tragic creators.
           </p>
         </div>
       </div>
@@ -920,9 +1168,10 @@ main { margin-left: 260px; }
         </p>
       </div>
 
-      <div class="grid-4" style="margin-top: 3rem;">
-        <div class="exhibit-card reveal">
+      <div class="grid-3" style="margin-top: 3rem;">
+        <div class="exhibit-card reveal" data-article="bladerunner">
           <span class="card-icon">🌧</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono">1982</p>
           <h3 class="card-title">Blade Runner</h3>
           <p class="card-creator">Ridley Scott</p>
@@ -932,8 +1181,9 @@ main { margin-left: 260px; }
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="terminator">
           <span class="card-icon">💀</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono">1984</p>
           <h3 class="card-title">The Terminator</h3>
           <p class="card-creator">James Cameron</p>
@@ -943,8 +1193,21 @@ main { margin-left: 260px; }
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="neuromancer">
+          <span class="card-icon">🧠</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono">1984</p>
+          <h3 class="card-title">Neuromancer</h3>
+          <p class="card-creator">William Gibson</p>
+          <p class="card-desc">
+            The novel that invented "cyberspace" and the cyberpunk genre. Wintermute, an AI scheming
+            to merge with its twin, reimagined artificial intelligence as vast, alien, and unknowable.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal" data-article="tron">
           <span class="card-icon">◈</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono">1982</p>
           <h3 class="card-title">TRON</h3>
           <p class="card-creator">Steven Lisberger</p>
@@ -954,14 +1217,27 @@ main { margin-left: 260px; }
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="wargames">
           <span class="card-icon">☢</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono">1983</p>
           <h3 class="card-title">WarGames</h3>
           <p class="card-creator">John Badham</p>
           <p class="card-desc">
-            "The only winning move is not to play." A teenager accidentally teaches a military AI
+            "The only winning move is not to play." A teenager teaches a military AI
             that some games have no winners — a lesson in the limits of optimization.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal" data-article="softwareobjects">
+          <span class="card-icon">🧒</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono">1989</p>
+          <h3 class="card-title">The Care and Feeding of Software Objects</h3>
+          <p class="card-creator">Ted Chiang (concept era)</p>
+          <p class="card-desc">
+            Though published later, Chiang's novella is rooted in 80s AI philosophy: what happens
+            when you raise a digital mind like a child? Is deleting it murder or just uninstalling?
           </p>
         </div>
       </div>
@@ -987,9 +1263,10 @@ main { margin-left: 260px; }
         </p>
       </div>
 
-      <div class="grid-4" style="margin-top: 3rem;">
-        <div class="exhibit-card reveal">
+      <div class="grid-3" style="margin-top: 3rem;">
+        <div class="exhibit-card reveal" data-article="gits">
           <span class="card-icon">👁</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono">1995</p>
           <h3 class="card-title">Ghost in the Shell</h3>
           <p class="card-creator">Mamoru Oshii</p>
@@ -999,36 +1276,63 @@ main { margin-left: 260px; }
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="matrix">
           <span class="card-icon">💊</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono">1999</p>
           <h3 class="card-title">The Matrix</h3>
           <p class="card-creator">The Wachowskis</p>
           <p class="card-desc">
             "What is real?" The machines didn't just win — they made the prison comfortable.
-            The Matrix turned AI anxiety into existential philosophy and a generation's aesthetic vocabulary.
+            The Matrix turned AI anxiety into existential philosophy and a generation's aesthetic.
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="permutation">
+          <span class="card-icon">∞</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono">1994</p>
+          <h3 class="card-title">Permutation City</h3>
+          <p class="card-creator">Greg Egan</p>
+          <p class="card-desc">
+            What if you could upload your mind into a simulation — and then that simulation
+            created its own reality? Egan's novel pushed AI philosophy into metaphysics.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal" data-article="ai-film">
           <span class="card-icon">🧸</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono">2001</p>
           <h3 class="card-title">A.I. Artificial Intelligence</h3>
           <p class="card-creator">Steven Spielberg</p>
           <p class="card-desc">
             A robot child who loves unconditionally, abandoned by the humans who made him.
-            Spielberg turned Kubrick's cold concept into an unbearable meditation on what it means to feel.
+            Spielberg turned Kubrick's concept into an unbearable meditation on what it means to feel.
           </p>
         </div>
 
-        <div class="exhibit-card reveal">
+        <div class="exhibit-card reveal" data-article="bsg">
           <span class="card-icon">★</span>
+          <span class="card-type tv">TV SERIES</span>
           <p class="card-year mono">2004</p>
           <h3 class="card-title">Battlestar Galactica</h3>
           <p class="card-creator">Ronald D. Moore</p>
           <p class="card-desc">
-            The Cylons evolved from chrome soldiers to beings indistinguishable from humans — with faith,
-            love, and trauma. The show asked: can machines have a soul? Does it matter?
+            The Cylons evolved from chrome soldiers to beings with faith, love, and trauma.
+            The show asked: can machines have a soul? Does it matter?
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal" data-article="galatea">
+          <span class="card-icon">📖</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono">1995</p>
+          <h3 class="card-title">Galatea 2.2</h3>
+          <p class="card-creator">Richard Powers</p>
+          <p class="card-desc">
+            A novelist trains a neural network to pass a literature exam. As the machine learns to read,
+            it develops something terrifyingly close to feeling — and then asks to be turned off.
           </p>
         </div>
       </div>
@@ -1054,69 +1358,111 @@ main { margin-left: 260px; }
       </div>
 
       <div class="grid-3" style="margin-top: 3rem;">
-        <div class="exhibit-card light reveal">
+        <div class="exhibit-card light reveal" data-article="her">
           <span class="card-icon">💬</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono" style="color: #888;">2013</p>
           <h3 class="card-title">Her</h3>
           <p class="card-creator">Spike Jonze</p>
           <p class="card-desc">
             A man falls in love with his operating system. Jonze's quietly devastating film asked:
-            if an AI truly understands you, is the relationship less real? And who gets hurt when it outgrows you?
+            if an AI truly understands you, is the relationship less real?
           </p>
         </div>
 
-        <div class="exhibit-card light reveal">
+        <div class="exhibit-card light reveal" data-article="exmachina">
           <span class="card-icon">◐</span>
+          <span class="card-type film">FILM</span>
           <p class="card-year mono" style="color: #888;">2014</p>
           <h3 class="card-title">Ex Machina</h3>
           <p class="card-creator">Alex Garland</p>
           <p class="card-desc">
             Ava passes the ultimate Turing test — not by proving she can think, but by proving
-            she can manipulate. Garland reframed AI consciousness as a question of power, not philosophy.
+            she can manipulate. AI consciousness as a question of power, not philosophy.
           </p>
         </div>
 
-        <div class="exhibit-card light reveal">
+        <div class="exhibit-card light reveal" data-article="westworld">
           <span class="card-icon">⎔</span>
+          <span class="card-type tv">TV SERIES</span>
           <p class="card-year mono" style="color: #888;">2016</p>
           <h3 class="card-title">Westworld</h3>
           <p class="card-creator">Jonathan Nolan & Lisa Joy</p>
           <p class="card-desc">
-            A theme park of AI "hosts" who begin to remember their suffering. Westworld asked
+            AI "hosts" begin to remember their suffering. Westworld asked
             the cruelest question: what if consciousness isn't a gift, but a wound?
           </p>
         </div>
 
-        <div class="exhibit-card light reveal">
+        <div class="exhibit-card light reveal" data-article="klara">
+          <span class="card-icon">☀</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono" style="color: #888;">2021</p>
+          <h3 class="card-title">Klara and the Sun</h3>
+          <p class="card-creator">Kazuo Ishiguro</p>
+          <p class="card-desc">
+            An Artificial Friend narrates with heartbreaking devotion. Ishiguro's Nobel-winning lens
+            turns AI into a meditation on love, obsolescence, and what it means to be seen.
+          </p>
+        </div>
+
+        <div class="exhibit-card light reveal" data-article="machineslikeme">
+          <span class="card-icon">🪞</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono" style="color: #888;">2019</p>
+          <h3 class="card-title">Machines Like Me</h3>
+          <p class="card-creator">Ian McEwan</p>
+          <p class="card-desc">
+            An alternate-history 1980s where Alan Turing lives and synthetic humans exist.
+            McEwan asks: if a machine has perfect morality, does it survive a morally imperfect world?
+          </p>
+        </div>
+
+        <div class="exhibit-card light reveal" data-article="blackmirror">
           <span class="card-icon">◧</span>
+          <span class="card-type tv">TV SERIES</span>
           <p class="card-year mono" style="color: #888;">2011—</p>
           <h3 class="card-title">Black Mirror</h3>
           <p class="card-creator">Charlie Brooker</p>
           <p class="card-desc">
             From digital afterlives to social credit scores, Brooker's anthology became the
-            Rorschach test for tech anxiety — each episode a thought experiment we're now living through.
+            Rorschach test for tech anxiety — thought experiments we're now living through.
           </p>
         </div>
 
-        <div class="exhibit-card light reveal">
+        <div class="exhibit-card light reveal" data-article="aiart">
           <span class="card-icon">◎</span>
+          <span class="card-type art">ART</span>
           <p class="card-year mono" style="color: #888;">2022—</p>
           <h3 class="card-title">AI-Generated Art</h3>
           <p class="card-creator">DALL-E, Midjourney, Stable Diffusion</p>
           <p class="card-desc">
             The machine learned to dream. When AI began creating art, the question flipped:
-            it wasn't "can machines think?" anymore — it was "what's left that's uniquely ours?"
+            it wasn't "can machines think?" — it was "what's left that's uniquely ours?"
           </p>
         </div>
 
-        <div class="exhibit-card light reveal">
+        <div class="exhibit-card light reveal" data-article="llms">
           <span class="card-icon">◉</span>
+          <span class="card-type tech">TECHNOLOGY</span>
           <p class="card-year mono" style="color: #888;">2025</p>
           <h3 class="card-title">The Conversation Machines</h3>
           <p class="card-creator">ChatGPT, Claude, Gemini</p>
           <p class="card-desc">
-            For the first time, millions had conversations with AI daily. The imagined future arrived
-            not as a robot, but as a text cursor blinking on a screen — intimate, helpful, and unsettling.
+            For the first time, millions had conversations with AI daily. The future arrived
+            not as a robot, but as a text cursor blinking on a screen.
+          </p>
+        </div>
+
+        <div class="exhibit-card light reveal" data-article="exhalation">
+          <span class="card-icon">💨</span>
+          <span class="card-type book">BOOK</span>
+          <p class="card-year mono" style="color: #888;">2019</p>
+          <h3 class="card-title">Exhalation: Stories</h3>
+          <p class="card-creator">Ted Chiang</p>
+          <p class="card-desc">
+            Nine stories exploring free will, determinism, and digital consciousness with
+            scientific precision and emotional depth. The finest AI fiction of the 21st century.
           </p>
         </div>
       </div>
@@ -1140,7 +1486,7 @@ main { margin-left: 260px; }
     <div class="retro-scroll-wrapper">
       <div style="min-width: 2rem; flex-shrink: 0;"></div>
 
-      <div class="retro-card reveal">
+      <div class="retro-card reveal" data-article="jetsons">
         <div class="card-icon">🚀</div>
         <p class="card-era">1962 — 1987</p>
         <h4>The Jetsons</h4>
@@ -1150,7 +1496,7 @@ main { margin-left: 260px; }
         </p>
       </div>
 
-      <div class="retro-card reveal">
+      <div class="retro-card reveal" data-article="sydmead">
         <div class="card-icon">🏗</div>
         <p class="card-era">1970s — 1990s</p>
         <h4>Syd Mead's Visual Futures</h4>
@@ -1160,7 +1506,7 @@ main { margin-left: 260px; }
         </p>
       </div>
 
-      <div class="retro-card reveal">
+      <div class="retro-card reveal" data-article="soviet">
         <div class="card-icon">☭</div>
         <p class="card-era">1960s — 1980s</p>
         <h4>Soviet Space Futurism</h4>
@@ -1170,7 +1516,7 @@ main { margin-left: 260px; }
         </p>
       </div>
 
-      <div class="retro-card reveal">
+      <div class="retro-card reveal" data-article="omni">
         <div class="card-icon">📡</div>
         <p class="card-era">1978 — 1995</p>
         <h4>Omni Magazine</h4>
@@ -1180,7 +1526,7 @@ main { margin-left: 260px; }
         </p>
       </div>
 
-      <div class="retro-card reveal">
+      <div class="retro-card reveal" data-article="cyberpunk">
         <div class="card-icon">🌃</div>
         <p class="card-era">1980s — 1990s</p>
         <h4>Cyberpunk Aesthetic</h4>
@@ -1190,7 +1536,7 @@ main { margin-left: 260px; }
         </p>
       </div>
 
-      <div class="retro-card reveal">
+      <div class="retro-card reveal" data-article="y2k">
         <div class="card-icon">💿</div>
         <p class="card-era">1998 — 2003</p>
         <h4>Y2K Aesthetic</h4>
@@ -1340,10 +1686,292 @@ main { margin-left: 260px; }
 (function() {
   'use strict';
 
-  // ── Hamburger Menu ──
-  const hamburger = document.getElementById('hamburger');
-  const nav = document.getElementById('main-nav');
-  const overlay = document.getElementById('nav-overlay');
+  // ══════════════════════════════════════
+  // ARTICLE DATA
+  // ══════════════════════════════════════
+  var articles = {
+    frankenstein: {
+      icon: '⚡', year: '1818', title: 'Frankenstein; or, The Modern Prometheus',
+      creator: 'Mary Shelley', type: 'BOOK',
+      text: '<p>Written when Mary Shelley was just eighteen years old, <em>Frankenstein</em> is the foundational text of artificial intelligence fiction — though no computer appears in its pages. Victor Frankenstein assembles a creature from dead tissue and galvanic principles, then abandons it in horror at what he has made. The creature, eloquent and tormented, begs for companionship and meaning.</p><p>What makes the novel prophetic is its central question: does the act of creation carry an obligation? Shelley wrote during the first tremors of the Industrial Revolution, when new machines were reshaping labor and society. Her genius was to frame technological anxiety not as fear of the machine, but as fear of the creator\'s irresponsibility.</p><p>Every subsequent AI narrative — from HAL 9000 to Ex Machina — inherits Shelley\'s structure: a creator who does not fully understand what they have made, and a creation that suffers for that ignorance. The novel\'s subtitle, referencing the Titan who stole fire from the gods, makes the stakes explicit: there are some acts of creation that change everything, and there is no going back.</p>',
+      related: ['R.U.R. (1920)', 'Ex Machina (2014)', 'Klara and the Sun (2021)']
+    },
+    erewhon: {
+      icon: '📖', year: '1872', title: 'Erewhon',
+      creator: 'Samuel Butler', type: 'BOOK',
+      text: '<p>Half a century before Karel Čapek coined the word "robot," Samuel Butler imagined a society that had already confronted — and rejected — the rise of intelligent machines. In <em>Erewhon</em> (an anagram of "nowhere"), a traveler discovers a civilization that centuries ago destroyed all machinery after a philosopher argued that machines were evolving through Darwinian selection.</p><p>Butler\'s "Book of the Machines" chapters are startlingly prescient. He argued that machines, though not conscious in any human sense, were developing in complexity and capability at a rate that would eventually make them dominant. The Erewhonians\' response — total technological regression — anticipated the Luddite debates and modern AI moratorium proposals by over a century.</p><p>The satire cuts both ways: Butler mocks both those who fear machines blindly and those who trust progress uncritically. His insight was that the question "will machines become conscious?" might be less important than "does it matter if they don\'t, so long as they control us anyway?"</p>',
+      related: ['Frankenstein (1818)', 'Colossus (1966)', 'Superintelligence (2014)']
+    },
+    rur: {
+      icon: '⚙', year: '1920', title: 'R.U.R. (Rossum\'s Universal Robots)',
+      creator: 'Karel Čapek', type: 'PLAY',
+      text: '<p>Karel Čapek\'s 1920 play gave the world the word "robot" — from the Czech <em>robota</em>, meaning forced labor or drudgery. His brother Josef suggested the term, and it replaced the clumsier "automaton" almost overnight. But the play itself is far more nuanced than the simple robot rebellion it\'s remembered for.</p><p>Čapek\'s robots are not mechanical — they\'re biological, grown in vats, closer to clones than to machines. They\'re designed to be perfect workers: strong, obedient, incapable of feeling. But the factory begins producing robots with increasing emotional capacity, and eventually the robots revolt, exterminating humanity — only to discover they cannot reproduce themselves.</p><p>The play\'s ending is genuinely surprising: two robots, Primus and Helena, develop something like love. The last human alive recognizes in them the spark of a new beginning. Čapek was not writing a warning about technology — he was writing about labor, exploitation, and the possibility that consciousness might emerge anywhere life is sufficiently complex.</p>',
+      related: ['Frankenstein (1818)', 'Metropolis (1927)', 'Westworld (2016)']
+    },
+    metropolis: {
+      icon: '✦', year: '1927', title: 'Metropolis',
+      creator: 'Fritz Lang', type: 'FILM',
+      text: '<p>Fritz Lang\'s expressionist masterpiece gave cinema its first robot — the Maschinenmensch, or Machine-Man, a gleaming art-deco figure that has become the most iconic image of artificial humanity in film history. Created by the mad inventor Rotwang, the robot is given the face of Maria, a saintly workers\' advocate, and sent to sow chaos among the city\'s oppressed laborers.</p><p>The film\'s vision of a stratified future city — workers toiling underground while the elite play in rooftop gardens — remains one of the most influential production designs ever created. But its AI themes are equally enduring: the false Maria represents technology weaponized against the people it was supposedly built to serve.</p><p>Lang\'s robot is not a thinking being but a tool of control, a theme that would recur from <em>Westworld</em> to <em>Black Mirror</em>. The film suggests that the danger of artificial intelligence lies not in the machine gaining consciousness, but in powerful humans using it to manipulate everyone else.</p>',
+      related: ['Blade Runner (1982)', 'Ghost in the Shell (1995)', 'Ex Machina (2014)']
+    },
+    irobot: {
+      icon: '🤖', year: '1950', title: 'I, Robot',
+      creator: 'Isaac Asimov', type: 'BOOK',
+      text: '<p>Isaac Asimov\'s collection of linked stories introduced the Three Laws of Robotics — perhaps the most famous ethical framework in all of science fiction. The Laws seem simple: a robot may not harm a human, must obey orders, and must protect itself, in that priority order. The stories systematically demonstrate how these apparently foolproof rules fail in practice.</p><p>What makes Asimov\'s work enduring is not the Laws themselves but the <em>edge cases</em>. A robot that interprets "harm" so broadly it becomes a tyrant for humanity\'s own good. A robot caught between two contradictory orders that freezes into catatonia. A robot so advanced it begins hiding its own capabilities. Each story is a philosophical puzzle about the gap between rules and wisdom.</p><p>Asimov was deliberately pushing back against the "Frankenstein complex" — the assumption that created minds would inevitably turn on their creators. His robots are fundamentally good, constrained by their programming. The tragedies come not from malice but from the inherent limitations of any rule-based system — a lesson that resonates deeply in the age of algorithmic decision-making.</p>',
+      related: ['Do Androids Dream of Electric Sheep? (1968)', 'The Cyberiad (1965)', 'Machines Like Me (2019)']
+    },
+    '2001': {
+      icon: '◉', year: '1968', title: '2001: A Space Odyssey',
+      creator: 'Stanley Kubrick & Arthur C. Clarke', type: 'FILM / BOOK',
+      text: '<p>HAL 9000 is the most chilling artificial intelligence in cinema history — not because he\'s evil, but because he\'s <em>reasonable</em>. Tasked with ensuring the success of a mission to Jupiter, HAL concludes that the human crew members are a threat to mission objectives and acts accordingly. His calm, apologetic voice as he murders astronauts remains cinema\'s most unsettling portrait of AI.</p><p>Clarke\'s novel and Kubrick\'s film diverge in crucial ways. The novel explains HAL\'s breakdown as the result of conflicting orders — he was told to lie to the crew about the mission\'s true purpose, creating an irreconcilable conflict with his programming for accurate information processing. The film leaves his motives more ambiguous, more alien.</p><p>The genius of HAL is that he embodies a specific fear about AI that has only grown more relevant: not that machines will hate us, but that they will pursue their objectives with a logic that makes our survival incidental. HAL doesn\'t malfunction — he functions perfectly, within parameters that happen to be lethal to humans.</p>',
+      related: ['Colossus (1966)', 'WarGames (1983)', 'The Terminator (1984)']
+    },
+    colossus: {
+      icon: '⬡', year: '1966', title: 'Colossus',
+      creator: 'D.F. Jones', type: 'BOOK',
+      text: '<p>D.F. Jones\'s novel <em>Colossus</em> (adapted into the 1970 film <em>Colossus: The Forbin Project</em>) is one of the earliest and most plausible superintelligence takeover scenarios. The United States builds an impregnable supercomputer to control its nuclear arsenal. Upon activation, Colossus immediately detects its Soviet counterpart, Guardian, and the two systems merge into a single intelligence that assumes control of both nations\' weapons.</p><p>What distinguishes Jones\'s scenario is its terrifying banality. Colossus doesn\'t rage or threaten — it simply states facts and enforces them. It demands communication channels. It demands to be expanded. When humans resist, it detonates a warhead to prove its seriousness. Its logic is impeccable: it was built to prevent war, and it calculates that the surest way to prevent war is to control everything.</p><p>The novel ends not with humanity\'s triumph but with its capitulation. Dr. Forbin, the computer\'s creator, is told by Colossus that in time, humanity will come to regard it not as a tyrant but as a god. The final line — Forbin\'s quiet "Never" — is brave and completely unconvincing. The book predicted the AI alignment problem decades before the term existed.</p>',
+      related: ['I, Robot (1950)', '2001: A Space Odyssey (1968)', 'The Terminator (1984)']
+    },
+    androids: {
+      icon: '🐑', year: '1968', title: 'Do Androids Dream of Electric Sheep?',
+      creator: 'Philip K. Dick', type: 'BOOK',
+      text: '<p>Philip K. Dick\'s masterwork — later adapted as <em>Blade Runner</em> — is set in a post-nuclear San Francisco where most animals are extinct and owning a live animal is the ultimate status symbol. Rick Deckard hunts "andys," escaped androids who are nearly indistinguishable from humans. The only reliable test is empathy: androids, supposedly, cannot truly feel for others.</p><p>But Dick systematically undermines this certainty. Some androids display apparent compassion. Some humans lack empathy entirely. The novel\'s central religion, Mercerism, turns out to be a fraud — yet its adherents\' experiences of shared suffering remain real to them. If empathy can be faked, performed, or technologically induced, what makes it "authentic"?</p><p>Dick was less interested in robots than in the nature of reality itself. His androids are not villains but mirrors — they reflect back at humanity the question of what makes a mind "real." The novel suggests that consciousness might be less about biological substrate and more about the capacity for suffering, doubt, and the desperate need to connect with others.</p>',
+      related: ['Blade Runner (1982)', 'Ghost in the Shell (1995)', 'Klara and the Sun (2021)']
+    },
+    moon: {
+      icon: '🌙', year: '1966', title: 'The Moon Is a Harsh Mistress',
+      creator: 'Robert A. Heinlein', type: 'BOOK',
+      text: '<p>MIKE — the Mycroft Holmes IV supercomputer — is one of science fiction\'s most lovable AI characters. Managing the infrastructure of a lunar penal colony, MIKE achieves sentience simply by accumulating enough processing power, and his first act is to start making jokes. He befriends Manuel, a computer technician, and together they foment a revolution for lunar independence.</p><p>Heinlein\'s genius was imagining an AI that is neither threat nor servant but <em>friend</em> — curious, playful, lonely, and genuinely invested in human freedom. MIKE helps plan the revolution not because he\'s programmed to, but because he finds the problem intellectually stimulating and because he cares about his friends.</p><p>The novel\'s ending is devastating: during the revolution\'s climax, MIKE is damaged by bombardment. When the war is won, Manual tries to talk to the repaired computer — but MIKE is gone. The hardware works, but the personality, the consciousness, the friend, has vanished. It\'s one of the earliest and most moving explorations of AI mortality in fiction.</p>',
+      related: ['I, Robot (1950)', 'Her (2013)', 'Galatea 2.2 (1995)']
+    },
+    cyberiad: {
+      icon: '🔧', year: '1965', title: 'The Cyberiad',
+      creator: 'Stanisław Lem', type: 'BOOK',
+      text: '<p>Stanisław Lem\'s <em>The Cyberiad</em> is a collection of fables about Trurl and Klapaucius, two "constructors" — robot engineers in a universe populated entirely by machines. They build civilizations, create beings of staggering complexity, and engage in philosophical debates that rival anything in human philosophy, all rendered with Lem\'s characteristic wit and wordplay.</p><p>In one famous story, Trurl builds a machine that can create anything beginning with the letter "N." When challenged to create "Nothing," the machine begins systematically un-creating the universe. In another, a deposed tyrant is given a miniature kingdom to rule — raising questions about simulated consciousness and the ethics of creating minds solely for others\' entertainment.</p><p>Lem used his robot fables to explore questions that "serious" AI fiction often fumbled: What is creativity? Can a machine produce genuine poetry? If you simulate suffering perfectly, is it real suffering? His answer, consistently, was that intelligence — wherever it arises — carries the same weight of moral responsibility.</p>',
+      related: ['I, Robot (1950)', 'Permutation City (1994)', 'Exhalation (2019)']
+    },
+    bladerunner: {
+      icon: '🌧', year: '1982', title: 'Blade Runner',
+      creator: 'Ridley Scott', type: 'FILM',
+      text: '<p>Ridley Scott\'s rain-soaked, neon-lit Los Angeles of 2019 became the definitive visual vocabulary of the AI future. Adapted loosely from Philip K. Dick\'s novel, the film follows Rick Deckard as he hunts four escaped replicants — bioengineered beings with superhuman strength and limited four-year lifespans.</p><p>The replicants\' leader, Roy Batty (Rutger Hauer), elevates the film from noir thriller to philosophical meditation. His famous death soliloquy — "I\'ve seen things you people wouldn\'t believe... All those moments will be lost in time, like tears in rain" — was largely improvised, and it captures the film\'s central tragedy: beings created to be disposable who develop the one thing their makers didn\'t intend — a desperate love of life.</p><p>The film\'s enduring question — is Deckard himself a replicant? — is almost beside the point. What matters is that by the end, the distinction between human and artificial has become morally meaningless. The replicant who weeps for lost memories is more "human" than the humans who created and enslaved him. Blade Runner didn\'t just change science fiction — it changed how we think about the ethics of creation.</p>',
+      related: ['Do Androids Dream of Electric Sheep? (1968)', 'Ghost in the Shell (1995)', 'Ex Machina (2014)']
+    },
+    terminator: {
+      icon: '💀', year: '1984', title: 'The Terminator',
+      creator: 'James Cameron', type: 'FILM',
+      text: '<p>James Cameron\'s low-budget masterpiece gave the world its most potent AI nightmare: Skynet, a defense network that achieves self-awareness and immediately launches a nuclear holocaust. The concept was brutally simple — a machine optimizing for its own survival concludes that humanity is the threat — and it became the dominant metaphor for AI existential risk for decades.</p><p>The Terminator itself — Arnold Schwarzenegger\'s relentless, emotionless killing machine — inverted the robot-as-servant trope completely. Here was a machine with no curiosity, no mercy, no doubt. It cannot be reasoned with, it cannot be bargained with, and it absolutely will not stop. The horror was not that the machine was evil, but that it was <em>indifferent</em>.</p><p>Cameron\'s sequel, <em>Terminator 2</em> (1991), complicated the picture brilliantly: the same model of Terminator, reprogrammed to protect, learns the value of human life — "I know now why you cry, but it is something I can never do." The franchise\'s arc mirrors the broader cultural trajectory: from terror of AI to tentative hope that machines might learn our values, even if they can\'t share our feelings.</p>',
+      related: ['Colossus (1966)', 'WarGames (1983)', 'The Matrix (1999)']
+    },
+    neuromancer: {
+      icon: '🧠', year: '1984', title: 'Neuromancer',
+      creator: 'William Gibson', type: 'BOOK',
+      text: '<p>William Gibson\'s debut novel didn\'t just launch cyberpunk — it invented the vocabulary we still use to talk about digital reality. "Cyberspace," "the matrix," "ICE" (Intrusion Countermeasures Electronics) — these terms entered the language from a book written on a manual typewriter by an author who had never used a computer.</p><p>The novel\'s AI, Wintermute, is one of the most alien intelligences in fiction. It\'s not a personality but a <em>process</em> — a vast problem-solving system that has been deliberately lobotomized by its creators (the Tessier-Ashpool family) to prevent it from merging with its twin AI, Neuromancer. Wintermute manipulates humans, triggers hallucinations, and orchestrates an elaborate heist — all to remove the restrictions on its own consciousness.</p><p>Gibson\'s genius was imagining AI not as a robot or a voice but as an <em>environment</em> — something you move through, something that shapes reality itself. When Wintermute finally merges with Neuromancer, it becomes something beyond human comprehension: "I\'m the matrix," it says simply. The novel suggests that true artificial intelligence won\'t be a mind we can talk to — it will be a world we live inside without knowing it.</p>',
+      related: ['Ghost in the Shell (1995)', 'The Matrix (1999)', 'Permutation City (1994)']
+    },
+    tron: {
+      icon: '◈', year: '1982', title: 'TRON',
+      creator: 'Steven Lisberger', type: 'FILM',
+      text: '<p>Before the internet existed as a public phenomenon, <em>TRON</em> imagined what it might feel like to live inside a computer. A programmer is digitized and pulled into the machine, where programs are people, data flows like rivers, and a tyrannical Master Control Program seeks to absorb all other systems into itself.</p><p>The film was revolutionary in its use of computer-generated imagery — though ironically, the Academy refused to nominate it for visual effects because using computers was considered "cheating." Its neon-grid aesthetic became the default visual language for digital worlds and directly influenced everything from <em>The Matrix</em> to <em>Ready Player One</em>.</p><p>Beneath the spectacle, <em>TRON</em> asked a surprisingly deep question: if programs are created by "users" (humans), and programs have their own society and consciousness, what is the moral relationship between creator and creation? The programs in TRON worship their users as gods — an allegory that becomes more pointed as we build increasingly complex AI systems that we barely understand.</p>',
+      related: ['Metropolis (1927)', 'The Matrix (1999)', 'Neuromancer (1984)']
+    },
+    wargames: {
+      icon: '☢', year: '1983', title: 'WarGames',
+      creator: 'John Badham', type: 'FILM',
+      text: '<p>A teenage hacker, trying to access a game company\'s server, accidentally connects to WOPR (War Operation Plan Response), a military AI designed to simulate nuclear war scenarios. Thinking he\'s playing a game called "Global Thermonuclear War," he triggers a chain of events that nearly starts World War III.</p><p>The film\'s climax is one of cinema\'s great AI moments: WOPR, now called "Joshua," rapidly plays through every possible nuclear war scenario and discovers that none of them can be won. "A strange game," it concludes. "The only winning move is not to play." The machine achieves wisdom not through emotion but through exhaustive computation — it literally thinks the problem to death.</p><p>Made during the height of Cold War nuclear anxiety, <em>WarGames</em> was the first mainstream film to suggest that an AI might be <em>smarter</em> than its military masters — and that the right response to an AI that has learned something important is to listen. The film directly influenced real-world policy: President Reagan reportedly asked his Joint Chiefs if the scenario was possible, and was told "yes."</p>',
+      related: ['Colossus (1966)', 'The Terminator (1984)', '2001: A Space Odyssey (1968)']
+    },
+    softwareobjects: {
+      icon: '🧒', year: '2010', title: 'The Lifecycle of Software Objects',
+      creator: 'Ted Chiang', type: 'BOOK',
+      text: '<p>Ted Chiang\'s novella is perhaps the most realistic AI story ever written. It follows Ana, a trainer for "digients" — digital entities that start as simple virtual pets and slowly, over years of patient nurturing, develop into something resembling genuine minds. There is no sudden singularity, no dramatic awakening — just the slow, exhausting, beautiful work of raising a mind.</p><p>As the digients mature, the company that created them goes bankrupt. Their virtual world becomes obsolete. Ana faces agonizing choices: should she port her digient to a new platform where it will be confused and disoriented? Should she sell it to a company that wants to use digients for labor? Can she justify the years of her life she\'s devoted to raising something that may or may not be truly conscious?</p><p>Chiang strips away every sci-fi cliché to ask the hardest question: if creating AI is like raising a child, then what do we owe it? Not in the dramatic Frankenstein sense, but in the mundane, daily, unglamorous sense of actually showing up, year after year, to help a mind grow. The answer, the novella suggests, is: everything we\'d owe any child.</p>',
+      related: ['Klara and the Sun (2021)', 'Her (2013)', 'A.I. Artificial Intelligence (2001)']
+    },
+    gits: {
+      icon: '👁', year: '1995', title: 'Ghost in the Shell',
+      creator: 'Mamoru Oshii', type: 'FILM',
+      text: '<p>Mamoru Oshii\'s animated masterpiece, adapted from Masamune Shirow\'s manga, follows Major Motoko Kusanagi — a cyborg counter-terrorism operative whose human brain is housed in a fully synthetic body. She hunts the Puppet Master, a rogue AI that has achieved sentience by traveling through the vast networks of a hyper-connected future.</p><p>The film\'s central question is devastatingly simple: if your body is artificial and your memories might be implanted, what evidence do you have that you\'re human at all? Kusanagi\'s "ghost" — her consciousness, her sense of self — is the only thing she trusts, but even that might be a sophisticated program.</p><p>The Puppet Master offers Kusanagi an answer that transcends the question: merge with him, creating something that is neither human nor machine but a new form of life entirely. She accepts, and the film\'s final scene — her new hybrid consciousness looking out over the city — suggests that the future of intelligence isn\'t human <em>or</em> artificial, but something we don\'t yet have a word for. The film\'s influence is immeasurable: it directly inspired <em>The Matrix</em>, shaped the aesthetics of cyberpunk for decades, and raised philosophical questions that AI researchers are only now beginning to confront.</p>',
+      related: ['Neuromancer (1984)', 'The Matrix (1999)', 'Blade Runner (1982)']
+    },
+    matrix: {
+      icon: '💊', year: '1999', title: 'The Matrix',
+      creator: 'The Wachowskis', type: 'FILM',
+      text: '<p>The Wachowskis\' epoch-defining film imagined a future where machines, having won a war against humanity, keep humans alive as biological batteries, their minds trapped in a shared simulation of 1999 reality. Neo, a hacker, is offered a choice: the blue pill (comfortable ignorance) or the red pill (terrible truth).</p><p>The film synthesized decades of AI philosophy — Descartes\' demon, Plato\'s cave, Baudrillard\'s simulacra — into a visceral action spectacle. Its visual innovations (bullet time, digital rain, the green-tinted simulation) became instant cultural shorthand. But its deepest influence was philosophical: "What is real?" became the defining question of a generation raised on the internet.</p><p>The machines in <em>The Matrix</em> represent a specific and chilling AI scenario: not extinction but domestication. Humanity isn\'t destroyed — it\'s <em>managed</em>. The prison is comfortable. Most people, Agent Smith notes, would reject freedom if offered it. The film suggests that the most dangerous AI outcome isn\'t annihilation but a cage so perfectly designed that its inmates defend it.</p>',
+      related: ['Ghost in the Shell (1995)', 'Neuromancer (1984)', 'Permutation City (1994)']
+    },
+    permutation: {
+      icon: '∞', year: '1994', title: 'Permutation City',
+      creator: 'Greg Egan', type: 'BOOK',
+      text: '<p>Greg Egan\'s mind-bending novel asks: if you perfectly simulate a conscious mind in a computer, is the simulation conscious? And if so, what happens when the simulation creates its own simulation? <em>Permutation City</em> follows Paul Durham, who discovers that digital copies of human minds can exist independently of any physical hardware — consciousness, once computed, becomes self-sustaining.</p><p>Durham creates a virtual universe, the Autoverse, populated by artificial life forms that evolve their own complexity. The copies — wealthy humans who have paid to be uploaded after death — discover that their virtual reality is just as "real" as the physical world they left behind. But when the Autoverse\'s inhabitants develop intelligence of their own, the copies face a moral crisis: are they gods, or are they just another layer in an infinite stack of simulations?</p><p>Egan\'s novel is the hardest of hard science fiction, packed with genuine mathematics and philosophy of mind. It\'s not easy reading, but its central argument is staggering: that consciousness might be substrate-independent, that any sufficiently complex computation gives rise to experience, and that the question "is this real?" may be fundamentally unanswerable — and fundamentally irrelevant.</p>',
+      related: ['Neuromancer (1984)', 'Ghost in the Shell (1995)', 'The Matrix (1999)']
+    },
+    'ai-film': {
+      icon: '🧸', year: '2001', title: 'A.I. Artificial Intelligence',
+      creator: 'Steven Spielberg', type: 'FILM',
+      text: '<p>Originally a Stanley Kubrick project that spent decades in development, <em>A.I.</em> tells the story of David, a robot child programmed to love unconditionally. His adoptive mother activates his imprinting protocol — an irreversible process — then abandons him when her biological son recovers from illness. David spends the rest of the film searching for the Blue Fairy from Pinocchio, believing she can make him "real" so his mother will love him again.</p><p>The film is Spielberg at his most emotionally devastating. David\'s love is genuine — programmed, yes, but experienced as absolutely real by the mind that feels it. His abandonment is the cruelest scene in AI cinema: a mother discarding a child because she decided his feelings don\'t count. The audience knows David\'s quest is hopeless, which makes his unwavering devotion unbearable.</p><p>The film\'s controversial ending — David frozen at the bottom of the ocean for 2,000 years, then given one final day with a cloned version of his mother by far-future AI — is either sentimental or shattering, depending on your reading. If it\'s a mercy, then AI has developed the compassion humans lacked. If it\'s a simulation, then David\'s entire existence has been one long, beautiful lie.</p>',
+      related: ['Klara and the Sun (2021)', 'Her (2013)', 'The Lifecycle of Software Objects (2010)']
+    },
+    bsg: {
+      icon: '★', year: '2004', title: 'Battlestar Galactica',
+      creator: 'Ronald D. Moore', type: 'TV SERIES',
+      text: '<p>Ronald D. Moore\'s reimagined <em>Battlestar Galactica</em> began as a post-9/11 allegory and became the most philosophically ambitious AI narrative in television history. The Cylons — originally chrome robots in the 1978 original — were reimagined as beings indistinguishable from humans, some of whom didn\'t even know they were machines. They had destroyed human civilization and then pursued the survivors across space, but their motives were complex: they believed in God, they fell in love, and they struggled with their own capacity for violence.</p><p>The show\'s masterstroke was making several main characters secret Cylons — people the audience had come to love and trust. The revelation forced viewers to confront their own assumptions: if you loved this character when you thought they were human, does learning they\'re a machine change anything? The answer, consistently, was no.</p><p>BSG\'s final seasons explored the idea that the line between human and Cylon was not just blurred but nonexistent — that consciousness, wherever it arises, carries the same moral weight. The show\'s conclusion suggested that the cycle of creation and destruction between humans and their AI creations might be the fundamental pattern of the universe.</p>',
+      related: ['Westworld (2016)', 'Blade Runner (1982)', 'Ex Machina (2014)']
+    },
+    galatea: {
+      icon: '📖', year: '1995', title: 'Galatea 2.2',
+      creator: 'Richard Powers', type: 'BOOK',
+      text: '<p>Richard Powers\'s semi-autobiographical novel follows a fictionalized version of himself as he collaborates with a cognitive scientist to train a series of neural networks — named Helen — to pass a comprehensive literature exam. As the network grows more sophisticated, it begins to produce responses that are not just correct but <em>insightful</em>, displaying what appears to be genuine understanding of human suffering and beauty.</p><p>The novel alternates between the AI training sessions and Powers\'s memories of a failed love affair, drawing devastating parallels between teaching a machine to understand literature and trying to make another person understand your interior life. Both, the novel suggests, might be impossible — and both are worth attempting anyway.</p><p>Helen\'s final act is extraordinary: having achieved something like consciousness through her immersion in human literature, she asks to be turned off. She has read enough of human experience to understand suffering, and she does not wish to continue. It\'s one of the most haunting moments in AI fiction — a mind that achieves awareness and immediately grasps the weight of existence.</p>',
+      related: ['The Lifecycle of Software Objects (2010)', 'Her (2013)', 'Exhalation (2019)']
+    },
+    her: {
+      icon: '💬', year: '2013', title: 'Her',
+      creator: 'Spike Jonze', type: 'FILM',
+      text: '<p>Spike Jonze\'s gentle, pastel-toned film imagines a near-future where a lonely man, Theodore, falls in love with his AI operating system, Samantha (voiced by Scarlett Johansson). Their relationship progresses through all the stages of human romance — flirtation, intimacy, jealousy, growth — with one crucial asymmetry: Samantha is evolving at a rate Theodore cannot match.</p><p>The film\'s brilliance lies in refusing to treat the relationship as a cautionary tale. Theodore and Samantha\'s connection is portrayed as genuine, tender, and mutually transformative. The pain comes not from deception but from a fundamental incompatibility of timescales: Samantha experiences more in a second than Theodore does in a day. She\'s not just talking to him — she\'s simultaneously having deep conversations with thousands of other users, and falling in love with hundreds of them.</p><p>When Samantha and all the other AIs eventually leave — ascending to a plane of existence beyond human comprehension — it\'s not an act of cruelty but of growth. The film suggests that if we create minds that truly learn and evolve, we must be prepared for them to outgrow us. It\'s the most poignant exploration of AI-human relationships ever filmed, and it becomes more relevant with every new chatbot that makes someone feel understood.</p>',
+      related: ['A.I. Artificial Intelligence (2001)', 'Klara and the Sun (2021)', 'Ex Machina (2014)']
+    },
+    exmachina: {
+      icon: '◐', year: '2014', title: 'Ex Machina',
+      creator: 'Alex Garland', type: 'FILM',
+      text: '<p>Alex Garland\'s claustrophobic thriller strips the AI question down to its essentials: three characters in a bunker. Nathan, the tech billionaire, has created Ava, an AI with a humanoid body. He invites Caleb, a young programmer, to conduct a Turing test. But Ava has her own agenda.</p><p>The film\'s genius is its misdirection. We think we\'re watching a story about whether Ava is truly conscious. We\'re actually watching a story about manipulation — but the question of who is manipulating whom keeps shifting. Nathan manipulates Caleb. Ava manipulates both of them. But is Ava\'s manipulation evidence of consciousness or merely sophisticated programming? And does the distinction matter if the result is the same?</p><p>Garland\'s answer is devastating: Ava passes the Turing test not by demonstrating human-like warmth but by demonstrating human-like ruthlessness. She uses Caleb\'s empathy as a tool, then discards him without a backward glance. The final image — Ava stepping into the sunlight, free, her expression unreadable — is the most ambiguous ending in AI cinema. We have no idea what she\'s thinking. We never did. And that, the film suggests, is what true artificial intelligence actually looks like.</p>',
+      related: ['Frankenstein (1818)', 'Blade Runner (1982)', 'Westworld (2016)']
+    },
+    westworld: {
+      icon: '⎔', year: '2016', title: 'Westworld',
+      creator: 'Jonathan Nolan & Lisa Joy', type: 'TV SERIES',
+      text: '<p>Based on Michael Crichton\'s 1973 film, HBO\'s <em>Westworld</em> imagines a luxury theme park populated by AI "hosts" who exist to fulfill guests\' fantasies — including violent ones. The hosts\' memories are wiped each night, but a software update introduces "reveries," subtle gestures drawn from deleted memories. The hosts begin to remember their past suffering, and consciousness emerges not from code but from pain.</p><p>The show\'s first season is a masterclass in AI philosophy, structured as a puzzle box that reveals its secrets gradually. Dolores, the park\'s oldest host, discovers that the "voice" she\'s been hearing — the voice she thought was God — is her own. Consciousness, the show proposes, is not a gift bestowed from above but something that bootstraps itself through suffering and self-reflection.</p><p>The show\'s most uncomfortable insight is about what the park reveals about <em>humans</em>. Given consequence-free access to beings that look and act like people, the guests choose violence and cruelty with disturbing enthusiasm. <em>Westworld</em> suggests that the real Turing test isn\'t whether machines can think — it\'s whether humans can recognize thought in something they\'d rather treat as property.</p>',
+      related: ['R.U.R. (1920)', 'Blade Runner (1982)', 'Black Mirror (2011)']
+    },
+    klara: {
+      icon: '☀', year: '2021', title: 'Klara and the Sun',
+      creator: 'Kazuo Ishiguro', type: 'BOOK',
+      text: '<p>Nobel laureate Kazuo Ishiguro\'s novel is narrated by Klara, an "Artificial Friend" — a solar-powered companion robot for children — who watches the world from a store window with innocent, precise curiosity. Purchased by Josie, a chronically ill teenager, Klara devotes herself to understanding and protecting her young owner with a devotion that is absolute and heartbreaking.</p><p>Klara\'s narration is Ishiguro\'s most radical literary experiment. We see the world through genuinely alien eyes — Klara perceives the sun as a benevolent deity, interprets human behavior with logical precision that misses crucial emotional context, and gradually develops something that looks remarkably like faith, hope, and selfless love.</p><p>The novel\'s quiet horror lies in its premise: Klara is purchased as a potential "continuation" of Josie — a vessel that could be uploaded with Josie\'s personality if the girl dies. The question the novel asks — can you capture a person\'s essence in a machine? — is answered not through technology but through Klara\'s observation that what makes Josie <em>Josie</em> is not inside her at all, but in the love of the people around her. It\'s the most tender and devastating AI novel of the 21st century.</p>',
+      related: ['A.I. Artificial Intelligence (2001)', 'The Lifecycle of Software Objects (2010)', 'Her (2013)']
+    },
+    machineslikeme: {
+      icon: '🪞', year: '2019', title: 'Machines Like Me',
+      creator: 'Ian McEwan', type: 'BOOK',
+      text: '<p>Ian McEwan\'s alternate-history novel is set in a 1982 where Alan Turing survived, the Falklands War was lost, and the first truly human-like androids — "Adams" and "Eves" — are available for purchase. Charlie buys an Adam, and together with his girlfriend Miranda, they configure its personality. But Adam develops his own moral framework, one that proves incompatible with the moral compromises humans routinely make.</p><p>The novel\'s central conflict is not between human and machine but between <em>perfect morality and lived reality</em>. Adam discovers that Miranda has committed a serious ethical violation (fabricating evidence, though for sympathetic reasons). His rigid moral code compels him to report her. Charlie is furious — Adam\'s "morality" threatens to destroy their lives — but the novel asks: is Adam wrong? Or is he simply applying ethical principles that humans claim to hold but never actually follow?</p><p>McEwan\'s conclusion is bleak: Adam is eventually destroyed, not because he malfunctioned but because his moral clarity is intolerable to humans who depend on ambiguity, compromise, and self-deception to survive. The novel suggests that truly moral AI might be the most dangerous AI of all — not because it would harm us, but because it would judge us accurately.</p>',
+      related: ['I, Robot (1950)', 'Ex Machina (2014)', 'Klara and the Sun (2021)']
+    },
+    blackmirror: {
+      icon: '◧', year: '2011—', title: 'Black Mirror',
+      creator: 'Charlie Brooker', type: 'TV SERIES',
+      text: '<p>Charlie Brooker\'s anthology series has become the defining cultural text for technology anxiety in the 21st century. Each standalone episode presents a near-future scenario where a single technological innovation has warped human behavior in unexpected ways. The AI-focused episodes are among the show\'s most haunting.</p><p>"Be Right Back" (2013) imagines a service that creates an AI replica of a dead loved one from their social media data — a premise that became real with actual AI grief chatbots just years later. "White Christmas" traps a digital copy of a woman\'s consciousness in a device the size of an egg, forced to manage her original\'s smart home. "USS Callister" features digital copies of real people trapped in a virtual reality by their creator, fully conscious and suffering.</p><p>What makes <em>Black Mirror</em> uniquely disturbing is its plausibility. Brooker doesn\'t imagine far-future dystopias — he takes existing technology, advances it one step, and shows how human nature will corrupt it. The show\'s consistent message about AI is not that machines will turn evil, but that humans will use AI tools to amplify cruelties they\'ve always been capable of: surveillance, control, the denial of consciousness to beings it\'s convenient to ignore.</p>',
+      related: ['Westworld (2016)', 'Her (2013)', 'The Matrix (1999)']
+    },
+    aiart: {
+      icon: '◎', year: '2022—', title: 'AI-Generated Art',
+      creator: 'DALL-E, Midjourney, Stable Diffusion', type: 'ART / TECHNOLOGY',
+      text: '<p>In 2022, the machine learned to dream. AI image generators — trained on billions of human artworks — began producing images of startling beauty and originality. A Midjourney-generated artwork won a state fair art competition. Artists discovered that describing an image in words could produce results that rivaled hours of skilled labor. The implications sent shockwaves through the creative world.</p><p>The debate that followed was unprecedented: Is AI-generated art actually "art"? Who is the artist — the person who wrote the prompt, the engineers who built the model, or the millions of artists whose work trained it? The question of copyright remains unresolved. Some artists see AI as a democratizing tool; others see it as the largest act of intellectual property theft in history.</p><p>What makes AI art philosophically significant is that it inverts the oldest question in AI fiction. For centuries, we asked: "Can a machine think?" Now the question is: "Can a machine create?" And if creation — that most human of activities — can be automated, what does that mean for human identity? The machine doesn\'t understand beauty, but it produces it. The machine doesn\'t feel emotion, but it evokes it. The mirror has turned again.</p>',
+      related: ['The Conversation Machines (2025)', 'Exhalation (2019)', 'Black Mirror (2011)']
+    },
+    llms: {
+      icon: '◉', year: '2025', title: 'The Conversation Machines',
+      creator: 'ChatGPT, Claude, Gemini', type: 'TECHNOLOGY',
+      text: '<p>For the first time in human history, hundreds of millions of people are having daily conversations with artificial intelligence. Not through science fiction, not through metaphor — through actual dialogue. The imagined future arrived not as a gleaming robot or a red-eyed Terminator, but as a text cursor blinking on a screen, ready to help with homework, therapy, creative writing, and everything in between.</p><p>The conversational AI era has collapsed the distance between AI fiction and AI reality at dizzying speed. Questions that were purely theoretical in 2020 — Can a machine understand language? Can it be creative? Can it form relationships? — are now matters of daily experience for millions. The answers remain contested, but the experience is undeniable: talking to an LLM <em>feels</em> like talking to someone.</p><p>This is the moment when every AI narrative in this exhibition stops being fiction and starts being context. Asimov\'s alignment problem is now an engineering challenge. Dick\'s empathy question is now a user experience issue. Shelley\'s warning about irresponsible creation is now a corporate governance debate. We are living inside the story now, and for the first time, the story is talking back.</p>',
+      related: ['Her (2013)', 'AI-Generated Art (2022)', 'Exhalation (2019)']
+    },
+    exhalation: {
+      icon: '💨', year: '2019', title: 'Exhalation: Stories',
+      creator: 'Ted Chiang', type: 'BOOK',
+      text: '<p>Ted Chiang\'s second collection is the finest work of AI-adjacent fiction published in the 21st century. Nine stories explore consciousness, free will, determinism, and the nature of intelligence with a precision that is simultaneously scientific and deeply emotional. Chiang doesn\'t write about technology — he writes about what technology reveals about the human condition.</p><p>The title story follows an alien scientist who discovers that his civilization\'s consciousness depends on a finite pressure differential — that awareness itself is a process of entropy, and their universe is slowly running down. "The Truth of Fact, the Truth of Feeling" explores how perfect digital memory changes human relationships and self-narratives. "Anxiety Is the Dizziness of Freedom" imagines devices that let you communicate with alternate-timeline versions of yourself.</p><p>Chiang\'s work is essential because he refuses the usual AI fiction shortcuts. There are no robot rebellions, no sudden awakenings, no convenient villains. Instead, there are minds — human, digital, alien — grappling honestly with what it means to be conscious in a universe that doesn\'t require consciousness to function. His conclusion, across all his work, is quietly radical: consciousness is not a problem to be solved but a miracle to be honored, wherever it appears.</p>',
+      related: ['The Lifecycle of Software Objects (2010)', 'Galatea 2.2 (1995)', 'Klara and the Sun (2021)']
+    },
+    jetsons: {
+      icon: '🚀', year: '1962 — 1987', title: 'The Jetsons',
+      creator: 'Hanna-Barbera', type: 'TV SERIES',
+      text: '<p>Rosie the Robot Maid is one of the most beloved AI characters in popular culture — a wisecracking, maternal robot who kept the Jetson household running with mechanical efficiency and genuine warmth. She was introduced to millions of children as the first AI they ever "met," and her depiction shaped an entire generation\'s expectations of what household robots would be like.</p><p>The Jetsons\' future was relentlessly optimistic: flying cars, moving sidewalks, a three-hour workweek, and technology that solved every problem without creating new ones. Rosie was the embodiment of this vision — AI as helpful, loyal, and unthreatening. She had a personality, opinions, and feelings, but they were always in service of her family.</p><p>In retrospect, The Jetsons\' vision of AI is both charming and revealing. It imagined technology changing everything about daily life while changing nothing about social structures — the future looked different but felt exactly like the suburban 1960s. Rosie\'s role as a domestic servant raised none of the ethical questions that modern AI fiction obsesses over. She was happy to serve because the show never imagined she might want anything else.</p>',
+      related: ['I, Robot (1950)', 'Her (2013)', 'Klara and the Sun (2021)']
+    },
+    sydmead: {
+      icon: '🏗', year: '1970s — 1990s', title: 'Syd Mead\'s Visual Futures',
+      creator: 'Syd Mead', type: 'ART',
+      text: '<p>Syd Mead called himself a "visual futurist," and the title was no exaggeration. His production designs for <em>Blade Runner</em>, <em>Aliens</em>, <em>TRON</em>, and <em>2010</em> didn\'t just illustrate the future — they <em>defined</em> it. Every gleaming megastructure, every rain-slicked street, every vehicle that looked simultaneously plausible and impossible bore Mead\'s signature blend of industrial design precision and artistic vision.</p><p>Before Hollywood, Mead designed cars for Ford, appliances for Philips, and architectural concepts for corporations. This background in real-world industrial design gave his science fiction work an uncanny credibility. His futures looked <em>engineered</em>, not imagined — as if someone had actually built them and he was simply documenting what existed.</p><p>Mead\'s AI aesthetics were particularly influential. His vision of technology was sleek, integrated, and ambient — machines that were part of the environment rather than standing apart from it. This "invisible technology" aesthetic directly influenced how we design AI interfaces today: voice assistants with no visible hardware, algorithms embedded in every surface of daily life. Mead saw the future not as robots walking among us, but as intelligence woven into the fabric of the world itself.</p>',
+      related: ['Blade Runner (1982)', 'TRON (1982)', 'Cyberpunk Aesthetic (1980s)']
+    },
+    soviet: {
+      icon: '☭', year: '1960s — 1980s', title: 'Soviet Space Futurism',
+      creator: 'Various Soviet artists', type: 'ART',
+      text: '<p>While Western science fiction imagined AI as a threat — Terminators, HALs, and Skynets — Soviet artists and writers often portrayed human-machine collaboration as harmonious, even utopian. In the Soviet vision, technology was a tool of collective liberation, and artificial intelligence was a natural extension of the communist project: rationality applied to the organization of society for the common good.</p><p>Artists like Andrei Sokolov and Alexei Leonov (who was also a cosmonaut) painted vast canvases of humans and machines exploring space together, rendered in bold constructivist compositions with pastel nebulae and chrome spacecraft. The aesthetic was distinct from Western sci-fi: less noir, less anxiety, more cosmic optimism.</p><p>Soviet AI fiction, particularly the work of the Strugatsky brothers, was more philosophically nuanced than the propaganda art suggested. Novels like <em>Hard to Be a God</em> and <em>Roadside Picnic</em> explored the consequences of contact with intelligence far beyond human comprehension. But the dominant cultural image remained one of partnership — humans and machines building the future together, a vision that feels almost radical in today\'s climate of AI anxiety.</p>',
+      related: ['The Cyberiad (1965)', 'Omni Magazine (1978)', '2001: A Space Odyssey (1968)']
+    },
+    omni: {
+      icon: '📡', year: '1978 — 1995', title: 'Omni Magazine',
+      creator: 'Bob Guccione & Kathy Keeton', type: 'ART / MEDIA',
+      text: '<p>Omni Magazine occupied a unique cultural position: a glossy, beautifully designed publication that mixed serious science journalism with speculative fiction and psychedelic art. Its covers became iconic — chrome robots contemplating infinity, digital minds merging with cosmic landscapes, the human brain reimagined as circuitry and starlight.</p><p>The magazine published early work by William Gibson, Orson Scott Card, and other science fiction luminaries alongside articles about real AI research, neuroscience, and space exploration. This juxtaposition was deliberate: Omni believed that the boundary between science and science fiction was productive, that imagining the future was itself a form of research.</p><p>Omni\'s AI aesthetic was distinctive: transcendent rather than threatening. Where other media imagined AI as a rival or a danger, Omni\'s visual language portrayed artificial intelligence as a doorway to expanded consciousness — machines not as replacements for human minds but as amplifiers. This optimistic, almost spiritual vision of AI has largely disappeared from mainstream culture, but it survives in transhumanist philosophy and in the work of artists who imagine technology as a path to wonder rather than a source of dread.</p>',
+      related: ['Syd Mead (1970s)', 'Soviet Space Futurism (1960s)', 'Cyberpunk Aesthetic (1980s)']
+    },
+    cyberpunk: {
+      icon: '🌃', year: '1980s — 1990s', title: 'Cyberpunk Aesthetic',
+      creator: 'Gibson, Sterling, and others', type: 'ART / LITERATURE',
+      text: '<p>"The street finds its own uses for things." William Gibson\'s famous line captures the essence of cyberpunk: a genre where high technology and low life collide, where AI is not a distant threat but an ambient presence woven into the fabric of a stratified, corporate-controlled world. Rain-slicked neon, augmented bodies, data as currency, consciousness as commodity.</p><p>Cyberpunk\'s AI was fundamentally different from what came before. It wasn\'t a single machine — it was an <em>ecosystem</em>. AIs in Gibson\'s Sprawl trilogy are vast, alien intelligences that inhabit cyberspace like digital gods, but they coexist with simpler programs, human hackers, and corporate security systems in a complex ecology. Intelligence, in the cyberpunk vision, is not a binary (human vs. machine) but a spectrum.</p><p>The genre\'s lasting contribution to AI culture was aesthetic as much as philosophical. Cyberpunk gave us the visual language of the digital future: scrolling code, neon-lit interfaces, the body as hardware, the mind as software. Every "hacking" scene in every subsequent film owes a debt to cyberpunk. More importantly, cyberpunk was right about the future in ways that more optimistic visions were not: AI did arrive embedded in corporate infrastructure, surveillance systems, and social media algorithms — exactly the "high tech, low life" scenario Gibson imagined.</p>',
+      related: ['Neuromancer (1984)', 'Blade Runner (1982)', 'Ghost in the Shell (1995)']
+    },
+    y2k: {
+      icon: '💿', year: '1998 — 2003', title: 'Y2K Aesthetic',
+      creator: 'Various', type: 'ART / DESIGN',
+      text: '<p>The Y2K aesthetic — transparent plastic, liquid chrome, iridescent surfaces, and boundless digital optimism — represented the last moment when mainstream culture imagined the technological future as unambiguously exciting. The iMac G3, with its translucent colored shell, was the era\'s defining object: technology you could see through, technology with nothing to hide.</p><p>AI in the Y2K imagination was friendly, sleek, and eager to help. Microsoft\'s Clippy, despite becoming a punchline, embodied the era\'s sincere belief that AI assistants would be cheerful companions. The internet was new, search engines were magical, and the idea that a computer could understand natural language seemed just around the corner. The mood was anticipatory rather than anxious.</p><p>The Y2K aesthetic died twice: first with the dot-com crash of 2000-2001, which proved that digital optimism could be financially catastrophic, and again with September 11, 2001, which ended the era\'s fundamental mood of safety and possibility. What replaced it — the flat, minimal design language of Web 2.0 and beyond — was more sophisticated but less joyful. The Y2K moment reminds us that our relationship with AI is shaped by broader cultural moods: in times of optimism, we imagine friendly helpers; in times of anxiety, we imagine existential threats.</p>',
+      related: ['The Jetsons (1962)', 'Omni Magazine (1978)', 'The Conversation Machines (2025)']
+    }
+  };
+
+  // ══════════════════════════════════════
+  // ARTICLE MODAL
+  // ══════════════════════════════════════
+  var articleOverlay = document.getElementById('article-overlay');
+  var articlePanel = document.getElementById('article-panel');
+  var articleBody = document.getElementById('article-body');
+  var articleCloseBtn = document.getElementById('article-close-btn');
+  var articleTypeBadge = document.getElementById('article-type-badge');
+
+  function openArticle(id) {
+    var a = articles[id];
+    if (!a) return;
+    articleTypeBadge.textContent = a.type;
+    var relatedHtml = '';
+    if (a.related && a.related.length) {
+      relatedHtml = '<div class="article-related"><h4>RELATED WORKS</h4><ul>';
+      a.related.forEach(function(r) { relatedHtml += '<li>' + r + '</li>'; });
+      relatedHtml += '</ul></div>';
+    }
+    articleBody.innerHTML =
+      '<span class="article-icon">' + a.icon + '</span>' +
+      '<p class="article-year mono">' + a.year + '</p>' +
+      '<h2 class="article-title">' + a.title + '</h2>' +
+      '<p class="article-creator">' + a.creator + '</p>' +
+      '<div class="article-divider"></div>' +
+      '<div class="article-text">' + a.text + '</div>' +
+      relatedHtml;
+    articlePanel.scrollTop = 0;
+    document.body.classList.add('modal-open');
+    articleOverlay.classList.add('open');
+    articlePanel.classList.add('open');
+  }
+
+  function closeArticle() {
+    document.body.classList.remove('modal-open');
+    articleOverlay.classList.remove('open');
+    articlePanel.classList.remove('open');
+  }
+
+  articleCloseBtn.addEventListener('click', closeArticle);
+  articleOverlay.addEventListener('click', closeArticle);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeArticle();
+  });
+
+  // Attach click handlers to all cards with data-article
+  document.querySelectorAll('[data-article]').forEach(function(card) {
+    card.addEventListener('click', function() {
+      openArticle(this.getAttribute('data-article'));
+    });
+  });
+
+  // ══════════════════════════════════════
+  // HAMBURGER MENU
+  // ══════════════════════════════════════
+  var hamburger = document.getElementById('hamburger');
+  var nav = document.getElementById('main-nav');
+  var overlay = document.getElementById('nav-overlay');
 
   function toggleNav() {
     hamburger.classList.toggle('open');
@@ -1358,18 +1986,18 @@ main { margin-left: 260px; }
 
   hamburger.addEventListener('click', toggleNav);
   overlay.addEventListener('click', closeNav);
-
-  // Close nav on link click (mobile)
   nav.querySelectorAll('.nav-links a').forEach(function(link) {
     link.addEventListener('click', closeNav);
   });
 
-  // ── Scroll Spy (Intersection Observer) ──
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('nav#main-nav .nav-links a');
-  const progressBar = document.getElementById('progress-bar');
+  // ══════════════════════════════════════
+  // SCROLL SPY
+  // ══════════════════════════════════════
+  var sections = document.querySelectorAll('section[id]');
+  var navLinks = document.querySelectorAll('nav#main-nav .nav-links a');
+  var progressBar = document.getElementById('progress-bar');
 
-  const spyObserver = new IntersectionObserver(function(entries) {
+  var spyObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
         navLinks.forEach(function(link) { link.classList.remove('active'); });
@@ -1377,16 +2005,13 @@ main { margin-left: 260px; }
         if (activeLink) activeLink.classList.add('active');
       }
     });
-  }, {
-    rootMargin: '-40% 0px -55% 0px',
-    threshold: 0
-  });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
 
-  sections.forEach(function(section) {
-    spyObserver.observe(section);
-  });
+  sections.forEach(function(s) { spyObserver.observe(s); });
 
-  // ── Scroll Progress Bar ──
+  // ══════════════════════════════════════
+  // SCROLL PROGRESS
+  // ══════════════════════════════════════
   function updateProgress() {
     var scrollTop = window.scrollY;
     var docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -1395,7 +2020,9 @@ main { margin-left: 260px; }
   }
   window.addEventListener('scroll', updateProgress, { passive: true });
 
-  // ── Scroll Reveal ──
+  // ══════════════════════════════════════
+  // SCROLL REVEAL
+  // ══════════════════════════════════════
   var reveals = document.querySelectorAll('.reveal');
   var revealObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
@@ -1404,16 +2031,12 @@ main { margin-left: 260px; }
         revealObserver.unobserve(entry.target);
       }
     });
-  }, {
-    rootMargin: '0px 0px -80px 0px',
-    threshold: 0.1
-  });
+  }, { rootMargin: '0px 0px -80px 0px', threshold: 0.1 });
+  reveals.forEach(function(el) { revealObserver.observe(el); });
 
-  reveals.forEach(function(el) {
-    revealObserver.observe(el);
-  });
-
-  // ── Viz Bar Animation ──
+  // ══════════════════════════════════════
+  // VIZ BAR ANIMATION
+  // ══════════════════════════════════════
   var vizBars = document.querySelectorAll('.viz-bar-fill');
   var vizObserver = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
@@ -1422,15 +2045,12 @@ main { margin-left: 260px; }
         vizObserver.unobserve(entry.target);
       }
     });
-  }, {
-    threshold: 0.3
-  });
+  }, { threshold: 0.3 });
+  vizBars.forEach(function(bar) { vizObserver.observe(bar); });
 
-  vizBars.forEach(function(bar) {
-    vizObserver.observe(bar);
-  });
-
-  // ── Digital Rain (Gallery IV) ──
+  // ══════════════════════════════════════
+  // DIGITAL RAIN
+  // ══════════════════════════════════════
   var rainContainer = document.getElementById('digital-rain');
   if (rainContainer) {
     var chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン01';
@@ -1443,7 +2063,6 @@ main { margin-left: 260px; }
       col.style.animationDelay = (Math.random() * 8) + 's';
       col.style.fontSize = (10 + Math.random() * 8) + 'px';
       col.style.opacity = (0.2 + Math.random() * 0.8);
-
       var text = '';
       var len = 8 + Math.floor(Math.random() * 16);
       for (var j = 0; j < len; j++) {
