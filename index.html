@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MACHINA IMAGINATA — AI in Popular Media</title>
+<meta name="description" content="An exhibition exploring how artificial intelligence has been portrayed in popular media across time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Libre+Franklin:wght@300;400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   RESET & BASE
+   ══════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: #1a1a1a;
+  background: #0a0a0a;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+h1, h2, h3, h4, h5 { font-family: 'Libre Franklin', sans-serif; line-height: 1.2; }
+.mono { font-family: 'Space Mono', monospace; }
+
+/* ══════════════════════════════════════
+   LAYOUT UTILITIES
+   ══════════════════════════════════════ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 6rem 2rem;
+}
+section {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+.grid-2 { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+.grid-4 { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+
+@media (min-width: 640px) {
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 960px) {
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1200px) {
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ══════════════════════════════════════
+   NAVIGATION — SIDEBAR (DESKTOP)
+   ══════════════════════════════════════ */
+nav#main-nav {
+  position: fixed;
+  left: 0; top: 0;
+  width: 260px;
+  height: 100vh;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(255,255,255,0.08);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+}
+nav#main-nav .nav-header {
+  padding: 0 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 1rem;
+}
+nav#main-nav .nav-header h3 {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.25rem;
+}
+nav#main-nav .nav-header p {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+nav#main-nav .nav-links {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+}
+nav#main-nav .nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1.5rem;
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: all 0.3s ease;
+  border-left: 2px solid transparent;
+  position: relative;
+}
+nav#main-nav .nav-links a .nav-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  opacity: 0.5;
+  min-width: 1.5rem;
+}
+nav#main-nav .nav-links a:hover {
+  color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.03);
+}
+nav#main-nav .nav-links a.active {
+  color: #fff;
+  border-left-color: #fff;
+  background: rgba(255,255,255,0.05);
+}
+/* Progress bar */
+nav#main-nav .progress-track {
+  margin: 1rem 1.5rem 0;
+  height: 2px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 1px;
+}
+nav#main-nav .progress-bar {
+  height: 100%;
+  background: #fff;
+  border-radius: 1px;
+  width: 0%;
+  transition: width 0.15s ease;
+}
+
+/* Push main content */
+main { margin-left: 260px; }
+
+/* ══════════════════════════════════════
+   HAMBURGER (MOBILE)
+   ══════════════════════════════════════ */
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 1rem; right: 1rem;
+  z-index: 1100;
+  width: 44px; height: 44px;
+  background: rgba(10,10,10,0.9);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.hamburger span {
+  display: block;
+  width: 20px; height: 2px;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+.hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 999;
+}
+
+@media (max-width: 960px) {
+  nav#main-nav { transform: translateX(-100%); width: 280px; }
+  nav#main-nav.open { transform: translateX(0); }
+  .hamburger { display: flex; }
+  .nav-overlay.open { display: block; }
+  main { margin-left: 0; }
+}
+
+/* ══════════════════════════════════════
+   SCROLL REVEAL
+   ══════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ══════════════════════════════════════
+   SECTION HEADINGS
+   ══════════════════════════════════════ */
+.gallery-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  opacity: 0.6;
+}
+.gallery-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+.gallery-subtitle {
+  font-size: 1.1rem;
+  max-width: 600px;
+  opacity: 0.75;
+  line-height: 1.8;
+}
+.section-divider {
+  width: 60px;
+  height: 2px;
+  margin: 2rem 0;
+}
+
+/* ══════════════════════════════════════
+   EXHIBIT CARDS
+   ══════════════════════════════════════ */
+.exhibit-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 2px;
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.exhibit-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+.exhibit-card .card-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  opacity: 0.5;
+  margin-bottom: 0.75rem;
+}
+.exhibit-card .card-title {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.exhibit-card .card-creator {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin-bottom: 1rem;
+}
+.exhibit-card .card-desc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  opacity: 0.8;
+}
+.exhibit-card .card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+/* Light card variant */
+.exhibit-card.light {
+  background: rgba(0,0,0,0.03);
+  border-color: rgba(0,0,0,0.1);
+  color: #1a1a1a;
+}
+.exhibit-card.light:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+}
+
+/* ══════════════════════════════════════
+   SECTION 0: ENTRANCE HALL (HERO)
+   ══════════════════════════════════════ */
+#entrance {
+  background: #0a0a0a;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+}
+#entrance .hero-content {
+  position: relative;
+  z-index: 2;
+}
+/* CSS Eye Motif */
+.eye-motif {
+  width: 180px;
+  height: 90px;
+  margin: 0 auto 3rem;
+  position: relative;
+}
+.eye-outer {
+  width: 180px;
+  height: 90px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: eyePulse 4s ease-in-out infinite;
+}
+.eye-iris {
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.eye-pupil {
+  width: 24px;
+  height: 24px;
+  background: #fff;
+  border-radius: 50%;
+  animation: pupilDilate 4s ease-in-out infinite;
+}
+@keyframes eyePulse {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.05); }
+}
+@keyframes pupilDilate {
+  0%, 100% { width: 24px; height: 24px; }
+  50% { width: 34px; height: 34px; }
+}
+#entrance .hero-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 1.5rem;
+}
+#entrance h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+  line-height: 1.05;
+}
+#entrance .hero-tagline {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#entrance .curatorial {
+  max-width: 560px;
+  margin: 0 auto;
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.9;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 2rem;
+}
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.25);
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ══════════════════════════════════════
+   SECTION 1: EARLY IMAGINATION (SEPIA)
+   ══════════════════════════════════════ */
+#gallery-1 {
+  background: #2a2117;
+  color: #e8dcc8;
+}
+#gallery-1 .section-divider { background: #c4a46c; }
+#gallery-1 .exhibit-card {
+  background: rgba(196,164,108,0.08);
+  border-color: rgba(196,164,108,0.2);
+}
+#gallery-1 .exhibit-card:hover {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+/* ══════════════════════════════════════
+   SECTION 2: GOLDEN AGE (NAVY)
+   ══════════════════════════════════════ */
+#gallery-2 {
+  background: #0d1b2a;
+  color: #c8d6e5;
+}
+#gallery-2 .section-divider { background: #4a90d9; }
+#gallery-2 .exhibit-card {
+  background: rgba(74,144,217,0.07);
+  border-color: rgba(74,144,217,0.2);
+}
+
+/* ══════════════════════════════════════
+   SECTION 3: RISE OF THE MACHINE (PURPLE/NEON)
+   ══════════════════════════════════════ */
+#gallery-3 {
+  background: #1a0a2e;
+  color: #e0d0f0;
+}
+#gallery-3 .section-divider { background: #b44aff; }
+#gallery-3 .exhibit-card {
+  background: rgba(180,74,255,0.06);
+  border-color: rgba(180,74,255,0.2);
+}
+#gallery-3 .exhibit-card:hover {
+  box-shadow: 0 8px 30px rgba(180,74,255,0.15);
+}
+/* Neon grid background */
+.neon-grid {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0.08;
+  pointer-events: none;
+}
+.neon-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(180,74,255,0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180,74,255,0.4) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove {
+  0% { transform: perspective(400px) rotateX(60deg) translateY(0); }
+  100% { transform: perspective(400px) rotateX(60deg) translateY(60px); }
+}
+
+/* ══════════════════════════════════════
+   SECTION 4: DIGITAL AWAKENING (MATRIX GREEN)
+   ══════════════════════════════════════ */
+#gallery-4 {
+  background: #050d05;
+  color: #a0d0a0;
+}
+#gallery-4 .section-divider { background: #00cc44; }
+#gallery-4 .exhibit-card {
+  background: rgba(0,204,68,0.05);
+  border-color: rgba(0,204,68,0.2);
+}
+#gallery-4 .exhibit-card:hover {
+  box-shadow: 0 8px 30px rgba(0,204,68,0.1);
+}
+/* CSS Digital Rain */
+.digital-rain {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.12;
+}
+.rain-column {
+  position: absolute;
+  top: -100%;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #00cc44;
+  writing-mode: vertical-rl;
+  animation: rainFall linear infinite;
+}
+@keyframes rainFall {
+  0% { transform: translateY(-10%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}
+
+/* ══════════════════════════════════════
+   SECTION 5: THE MIRROR AGE (MUSEUM WHITE)
+   ══════════════════════════════════════ */
+#gallery-5 {
+  background: #f5f3f0;
+  color: #1a1a1a;
+}
+#gallery-5 .section-divider { background: #1a1a1a; }
+#gallery-5 .gallery-label { color: #1a1a1a; }
+
+/* ══════════════════════════════════════
+   SECTION 6: RETRO FUTURISM (MIDNIGHT/ORANGE)
+   ══════════════════════════════════════ */
+#retro-futurism {
+  background: #0f1628;
+  color: #f0e6d4;
+  min-height: auto;
+  padding: 6rem 0 4rem;
+}
+#retro-futurism .section-divider { background: #e8743b; }
+.retro-scroll-wrapper {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  display: flex;
+  gap: 1.5rem;
+  padding: 2rem 2rem 2rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(232,116,59,0.4) transparent;
+}
+.retro-scroll-wrapper::-webkit-scrollbar { height: 6px; }
+.retro-scroll-wrapper::-webkit-scrollbar-track { background: transparent; }
+.retro-scroll-wrapper::-webkit-scrollbar-thumb { background: rgba(232,116,59,0.4); border-radius: 3px; }
+.retro-card {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
+  background: rgba(232,116,59,0.08);
+  border: 1px solid rgba(232,116,59,0.2);
+  border-radius: 2px;
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.retro-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(232,116,59,0.15);
+}
+.retro-card .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.retro-card .card-era {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: #e8743b;
+  margin-bottom: 0.5rem;
+}
+.retro-card h4 {
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+}
+.retro-card p {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  line-height: 1.7;
+}
+.scroll-indicator {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: rgba(232,116,59,0.5);
+}
+
+/* ══════════════════════════════════════
+   SECTION 7: THEMATIC ANALYSIS (WARM WHITE)
+   ══════════════════════════════════════ */
+#thematic {
+  background: #f8f6f2;
+  color: #1a1a1a;
+}
+#thematic .section-divider { background: #1a1a1a; }
+.theme-block {
+  padding: 2.5rem;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 2px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.theme-block:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+}
+.theme-block h4 {
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+}
+.theme-block p {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: #444;
+}
+/* CSS visualization bars */
+.viz-bar {
+  height: 6px;
+  border-radius: 3px;
+  margin: 1rem 0 0.4rem;
+  position: relative;
+  overflow: hidden;
+}
+.viz-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1.5s ease;
+  width: 0;
+}
+.viz-bar-fill.animated { width: var(--fill-width); }
+.viz-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: #888;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ══════════════════════════════════════
+   SECTION 8: CLOSING
+   ══════════════════════════════════════ */
+#closing {
+  background: #0a0a0a;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+#closing .closing-text {
+  max-width: 650px;
+  margin: 0 auto;
+}
+#closing blockquote {
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+#closing .credits {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+  line-height: 2;
+}
+#closing .credits a {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+/* ══════════════════════════════════════
+   TIMELINE CONNECTOR
+   ══════════════════════════════════════ */
+.timeline-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  opacity: 0.4;
+}
+.timeline-line {
+  width: 40px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.2;
+}
+.timeline-date {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  opacity: 0.5;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
+@media (max-width: 640px) {
+  .section-inner { padding: 4rem 1.25rem; }
+  .exhibit-card { padding: 1.5rem; }
+  .retro-card { flex: 0 0 260px; padding: 1.5rem; }
+  .gallery-title { margin-bottom: 0.75rem; }
+  .theme-block { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     NAVIGATION
+     ══════════════════════════════════════ -->
+<button class="hamburger" id="hamburger" aria-label="Toggle navigation">
+  <span></span><span></span><span></span>
+</button>
+<div class="nav-overlay" id="nav-overlay"></div>
+
+<nav id="main-nav">
+  <div class="nav-header">
+    <h3 class="mono">Exhibition Guide</h3>
+    <p>MACHINA IMAGINATA</p>
+  </div>
+  <div class="nav-links">
+    <a href="#entrance" data-section="entrance">
+      <span class="nav-num mono">00</span> Entrance Hall
+    </a>
+    <a href="#gallery-1" data-section="gallery-1">
+      <span class="nav-num mono">01</span> Early Imagination
+    </a>
+    <a href="#gallery-2" data-section="gallery-2">
+      <span class="nav-num mono">02</span> Golden Age
+    </a>
+    <a href="#gallery-3" data-section="gallery-3">
+      <span class="nav-num mono">03</span> Rise of the Machine
+    </a>
+    <a href="#gallery-4" data-section="gallery-4">
+      <span class="nav-num mono">04</span> Digital Awakening
+    </a>
+    <a href="#gallery-5" data-section="gallery-5">
+      <span class="nav-num mono">05</span> The Mirror Age
+    </a>
+    <a href="#retro-futurism" data-section="retro-futurism">
+      <span class="nav-num mono">06</span> Retro Futurism
+    </a>
+    <a href="#thematic" data-section="thematic">
+      <span class="nav-num mono">07</span> Thematic Analysis
+    </a>
+    <a href="#closing" data-section="closing">
+      <span class="nav-num mono">08</span> Closing
+    </a>
+  </div>
+  <div class="progress-track">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     MAIN CONTENT
+     ══════════════════════════════════════ -->
+<main>
+
+  <!-- ════ ENTRANCE HALL ════ -->
+  <section id="entrance">
+    <div class="hero-content">
+      <div class="eye-motif">
+        <div class="eye-outer">
+          <div class="eye-iris">
+            <div class="eye-pupil"></div>
+          </div>
+        </div>
+      </div>
+      <p class="hero-label mono">A CURATED EXHIBITION</p>
+      <h1>MACHINA<br>IMAGINATA</h1>
+      <p class="hero-tagline">How We Dreamed the Machine Mind</p>
+      <p class="curatorial">
+        Since the first storytellers imagined beings of bronze and clay brought to life by divine spark,
+        humanity has been rehearsing its relationship with artificial intelligence through art. This
+        exhibition traces that conversation — from gothic laboratories to neon-lit futures — exploring
+        not what AI is, but what we have imagined it could be, and what those imaginings reveal about us.
+      </p>
+    </div>
+    <div class="scroll-hint mono">SCROLL TO ENTER ↓</div>
+  </section>
+
+  <!-- ════ GALLERY I: EARLY IMAGINATION ════ -->
+  <section id="gallery-1">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="timeline-marker">
+          <div class="timeline-dot"></div>
+          <div class="timeline-line"></div>
+          <span class="timeline-date mono">PRE-1950</span>
+        </div>
+        <p class="gallery-label">Gallery I</p>
+        <h2 class="gallery-title">Early Imagination</h2>
+        <div class="section-divider"></div>
+        <p class="gallery-subtitle">
+          Before the word "robot" existed, writers and artists were already
+          imagining the consequences of creating artificial life — with awe, terror, and moral urgency.
+        </p>
+      </div>
+
+      <div class="grid-3" style="margin-top: 3rem;">
+        <div class="exhibit-card reveal">
+          <span class="card-icon">⚡</span>
+          <p class="card-year mono">1818</p>
+          <h3 class="card-title">Frankenstein</h3>
+          <p class="card-creator">Mary Shelley</p>
+          <p class="card-desc">
+            The first modern myth of creation run amok. Shelley's monster asks the question
+            that echoes through every AI narrative since: does the creator owe responsibility to what it creates?
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">⚙</span>
+          <p class="card-year mono">1920</p>
+          <h3 class="card-title">R.U.R. (Rossum's Universal Robots)</h3>
+          <p class="card-creator">Karel Čapek</p>
+          <p class="card-desc">
+            The play that gave us the word "robot" — from the Czech <em>robota</em>, meaning forced labor.
+            Čapek's synthetic workers revolt, but also learn to love, blurring the line between machine and soul.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">✦</span>
+          <p class="card-year mono">1927</p>
+          <h3 class="card-title">Metropolis</h3>
+          <p class="card-creator">Fritz Lang</p>
+          <p class="card-desc">
+            The Machine-Man — cinema's first robot. Part idol, part weapon, the Maschinenmensch
+            embodied the era's anxieties about industrialization and the dehumanization of labor.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ GALLERY II: GOLDEN AGE ════ -->
+  <section id="gallery-2">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="timeline-marker">
+          <div class="timeline-dot"></div>
+          <div class="timeline-line"></div>
+          <span class="timeline-date mono">1950s — 1970s</span>
+        </div>
+        <p class="gallery-label">Gallery II</p>
+        <h2 class="gallery-title">The Golden Age</h2>
+        <div class="section-divider"></div>
+        <p class="gallery-subtitle">
+          As real computers emerged, science fiction raced ahead — asking not just if machines could
+          think, but whether they should, and what happens when they say "no."
+        </p>
+      </div>
+
+      <div class="grid-4" style="margin-top: 3rem;">
+        <div class="exhibit-card reveal">
+          <span class="card-icon">🤖</span>
+          <p class="card-year mono">1950</p>
+          <h3 class="card-title">I, Robot</h3>
+          <p class="card-creator">Isaac Asimov</p>
+          <p class="card-desc">
+            Asimov's Three Laws became the first serious framework for machine ethics in fiction —
+            and their inevitable failure scenarios still inform AI safety debates today.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">◉</span>
+          <p class="card-year mono">1968</p>
+          <h3 class="card-title">2001: A Space Odyssey</h3>
+          <p class="card-creator">Stanley Kubrick & Arthur C. Clarke</p>
+          <p class="card-desc">
+            "I'm sorry, Dave. I'm afraid I can't do that." HAL 9000 — calm, polite, murderous —
+            redefined how we imagine AI: not as monster, but as something terrifyingly rational.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">⬡</span>
+          <p class="card-year mono">1966</p>
+          <h3 class="card-title">Colossus: The Forbin Project</h3>
+          <p class="card-creator">D.F. Jones</p>
+          <p class="card-desc">
+            A defense supercomputer gains sentience and seizes control — one of the earliest
+            "superintelligence takeover" narratives, chillingly matter-of-fact in its execution.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">🐑</span>
+          <p class="card-year mono">1968</p>
+          <h3 class="card-title">Do Androids Dream of Electric Sheep?</h3>
+          <p class="card-creator">Philip K. Dick</p>
+          <p class="card-desc">
+            Dick's masterwork asks: if empathy is what makes us human, and androids can learn empathy,
+            then what exactly are we protecting when we "retire" them?
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ GALLERY III: RISE OF THE MACHINE ════ -->
+  <section id="gallery-3">
+    <div class="neon-grid"></div>
+    <div class="section-inner" style="position: relative; z-index: 2;">
+      <div class="reveal">
+        <div class="timeline-marker">
+          <div class="timeline-dot"></div>
+          <div class="timeline-line"></div>
+          <span class="timeline-date mono">1980s</span>
+        </div>
+        <p class="gallery-label">Gallery III</p>
+        <h2 class="gallery-title">Rise of the Machine</h2>
+        <div class="section-divider"></div>
+        <p class="gallery-subtitle">
+          Personal computers entered homes. The machine was no longer abstract — it sat on your desk.
+          Popular culture responded with neon-edged visions of digital rebellion and cybernetic warfare.
+        </p>
+      </div>
+
+      <div class="grid-4" style="margin-top: 3rem;">
+        <div class="exhibit-card reveal">
+          <span class="card-icon">🌧</span>
+          <p class="card-year mono">1982</p>
+          <h3 class="card-title">Blade Runner</h3>
+          <p class="card-creator">Ridley Scott</p>
+          <p class="card-desc">
+            "All those moments will be lost in time, like tears in rain." The replicants'
+            desperate desire to live longer made them more human than their hunters.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">💀</span>
+          <p class="card-year mono">1984</p>
+          <h3 class="card-title">The Terminator</h3>
+          <p class="card-creator">James Cameron</p>
+          <p class="card-desc">
+            Skynet — the AI that looked at humanity and chose nuclear fire. Cameron's nightmare
+            became the default metaphor for AI existential risk in public discourse.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">◈</span>
+          <p class="card-year mono">1982</p>
+          <h3 class="card-title">TRON</h3>
+          <p class="card-creator">Steven Lisberger</p>
+          <p class="card-desc">
+            The first film to imagine life inside the machine — a digital world with its own society,
+            politics, and consciousness. The metaphor predated the internet by a decade.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">☢</span>
+          <p class="card-year mono">1983</p>
+          <h3 class="card-title">WarGames</h3>
+          <p class="card-creator">John Badham</p>
+          <p class="card-desc">
+            "The only winning move is not to play." A teenager accidentally teaches a military AI
+            that some games have no winners — a lesson in the limits of optimization.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ GALLERY IV: DIGITAL AWAKENING ════ -->
+  <section id="gallery-4">
+    <div class="digital-rain" id="digital-rain"></div>
+    <div class="section-inner" style="position: relative; z-index: 2;">
+      <div class="reveal">
+        <div class="timeline-marker">
+          <div class="timeline-dot"></div>
+          <div class="timeline-line"></div>
+          <span class="timeline-date mono">1990s — 2000s</span>
+        </div>
+        <p class="gallery-label">Gallery IV</p>
+        <h2 class="gallery-title">Digital Awakening</h2>
+        <div class="section-divider"></div>
+        <p class="gallery-subtitle">
+          The internet connected the world. AI stories evolved from "will it destroy us?" to
+          "what if reality itself is the machine?" — and what if we're already inside it?
+        </p>
+      </div>
+
+      <div class="grid-4" style="margin-top: 3rem;">
+        <div class="exhibit-card reveal">
+          <span class="card-icon">👁</span>
+          <p class="card-year mono">1995</p>
+          <h3 class="card-title">Ghost in the Shell</h3>
+          <p class="card-creator">Mamoru Oshii</p>
+          <p class="card-desc">
+            Major Kusanagi — a human mind in a synthetic body — asks: if you can copy consciousness,
+            is the copy still you? Oshii's anime defined cyberpunk philosophy for a generation.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">💊</span>
+          <p class="card-year mono">1999</p>
+          <h3 class="card-title">The Matrix</h3>
+          <p class="card-creator">The Wachowskis</p>
+          <p class="card-desc">
+            "What is real?" The machines didn't just win — they made the prison comfortable.
+            The Matrix turned AI anxiety into existential philosophy and a generation's aesthetic vocabulary.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">🧸</span>
+          <p class="card-year mono">2001</p>
+          <h3 class="card-title">A.I. Artificial Intelligence</h3>
+          <p class="card-creator">Steven Spielberg</p>
+          <p class="card-desc">
+            A robot child who loves unconditionally, abandoned by the humans who made him.
+            Spielberg turned Kubrick's cold concept into an unbearable meditation on what it means to feel.
+          </p>
+        </div>
+
+        <div class="exhibit-card reveal">
+          <span class="card-icon">★</span>
+          <p class="card-year mono">2004</p>
+          <h3 class="card-title">Battlestar Galactica</h3>
+          <p class="card-creator">Ronald D. Moore</p>
+          <p class="card-desc">
+            The Cylons evolved from chrome soldiers to beings indistinguishable from humans — with faith,
+            love, and trauma. The show asked: can machines have a soul? Does it matter?
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ GALLERY V: THE MIRROR AGE ════ -->
+  <section id="gallery-5">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="timeline-marker" style="color: #1a1a1a;">
+          <div class="timeline-dot"></div>
+          <div class="timeline-line"></div>
+          <span class="timeline-date mono">2010s — NOW</span>
+        </div>
+        <p class="gallery-label">Gallery V</p>
+        <h2 class="gallery-title">The Mirror Age</h2>
+        <div class="section-divider"></div>
+        <p class="gallery-subtitle" style="color: #555;">
+          AI moved from fiction to reality. The stories shifted — no longer imagining a future, but
+          reflecting the present. The machine became a mirror, and we weren't sure we liked what we saw.
+        </p>
+      </div>
+
+      <div class="grid-3" style="margin-top: 3rem;">
+        <div class="exhibit-card light reveal">
+          <span class="card-icon">💬</span>
+          <p class="card-year mono" style="color: #888;">2013</p>
+          <h3 class="card-title">Her</h3>
+          <p class="card-creator">Spike Jonze</p>
+          <p class="card-desc">
+            A man falls in love with his operating system. Jonze's quietly devastating film asked:
+            if an AI truly understands you, is the relationship less real? And who gets hurt when it outgrows you?
+          </p>
+        </div>
+
+        <div class="exhibit-card light reveal">
+          <span class="card-icon">◐</span>
+          <p class="card-year mono" style="color: #888;">2014</p>
+          <h3 class="card-title">Ex Machina</h3>
+          <p class="card-creator">Alex Garland</p>
+          <p class="card-desc">
+            Ava passes the ultimate Turing test — not by proving she can think, but by proving
+            she can manipulate. Garland reframed AI consciousness as a question of power, not philosophy.
+          </p>
+        </div>
+
+        <div class="exhibit-card light reveal">
+          <span class="card-icon">⎔</span>
+          <p class="card-year mono" style="color: #888;">2016</p>
+          <h3 class="card-title">Westworld</h3>
+          <p class="card-creator">Jonathan Nolan & Lisa Joy</p>
+          <p class="card-desc">
+            A theme park of AI "hosts" who begin to remember their suffering. Westworld asked
+            the cruelest question: what if consciousness isn't a gift, but a wound?
+          </p>
+        </div>
+
+        <div class="exhibit-card light reveal">
+          <span class="card-icon">◧</span>
+          <p class="card-year mono" style="color: #888;">2011—</p>
+          <h3 class="card-title">Black Mirror</h3>
+          <p class="card-creator">Charlie Brooker</p>
+          <p class="card-desc">
+            From digital afterlives to social credit scores, Brooker's anthology became the
+            Rorschach test for tech anxiety — each episode a thought experiment we're now living through.
+          </p>
+        </div>
+
+        <div class="exhibit-card light reveal">
+          <span class="card-icon">◎</span>
+          <p class="card-year mono" style="color: #888;">2022—</p>
+          <h3 class="card-title">AI-Generated Art</h3>
+          <p class="card-creator">DALL-E, Midjourney, Stable Diffusion</p>
+          <p class="card-desc">
+            The machine learned to dream. When AI began creating art, the question flipped:
+            it wasn't "can machines think?" anymore — it was "what's left that's uniquely ours?"
+          </p>
+        </div>
+
+        <div class="exhibit-card light reveal">
+          <span class="card-icon">◉</span>
+          <p class="card-year mono" style="color: #888;">2025</p>
+          <h3 class="card-title">The Conversation Machines</h3>
+          <p class="card-creator">ChatGPT, Claude, Gemini</p>
+          <p class="card-desc">
+            For the first time, millions had conversations with AI daily. The imagined future arrived
+            not as a robot, but as a text cursor blinking on a screen — intimate, helpful, and unsettling.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ RETRO FUTURISM GALLERY ════ -->
+  <section id="retro-futurism">
+    <div class="section-inner">
+      <div class="reveal">
+        <p class="gallery-label" style="color: #e8743b;">Special Exhibition</p>
+        <h2 class="gallery-title">Retro Futurism Gallery</h2>
+        <div class="section-divider"></div>
+        <p class="gallery-subtitle">
+          A collection of futures that never arrived — each one revealing more about the era
+          that imagined it than the future it predicted.
+        </p>
+      </div>
+    </div>
+
+    <div class="retro-scroll-wrapper">
+      <div style="min-width: 2rem; flex-shrink: 0;"></div>
+
+      <div class="retro-card reveal">
+        <div class="card-icon">🚀</div>
+        <p class="card-era">1962 — 1987</p>
+        <h4>The Jetsons</h4>
+        <p>
+          Rosie the Robot — a sarcastic maid with a heart of gold — introduced AI as domestic
+          companion to millions of children. The future was chrome, convenient, and charmingly naive.
+        </p>
+      </div>
+
+      <div class="retro-card reveal">
+        <div class="card-icon">🏗</div>
+        <p class="card-era">1970s — 1990s</p>
+        <h4>Syd Mead's Visual Futures</h4>
+        <p>
+          "Visual futurist" for Blade Runner, Aliens, and TRON, Mead painted a future of
+          gleaming megastructures and sentient vehicles. His designs shaped how Hollywood imagined tomorrow.
+        </p>
+      </div>
+
+      <div class="retro-card reveal">
+        <div class="card-icon">☭</div>
+        <p class="card-era">1960s — 1980s</p>
+        <h4>Soviet Space Futurism</h4>
+        <p>
+          While the West feared AI, Soviet artists imagined harmonious human-machine collaboration
+          in space — cosmic optimism rendered in bold constructivist style and pastel nebulae.
+        </p>
+      </div>
+
+      <div class="retro-card reveal">
+        <div class="card-icon">📡</div>
+        <p class="card-era">1978 — 1995</p>
+        <h4>Omni Magazine</h4>
+        <p>
+          Omni's covers were where science met psychedelia — chrome robots contemplating infinity,
+          digital minds merging with cosmic landscapes. It was the aesthetic of AI as transcendence.
+        </p>
+      </div>
+
+      <div class="retro-card reveal">
+        <div class="card-icon">🌃</div>
+        <p class="card-era">1980s — 1990s</p>
+        <h4>Cyberpunk Aesthetic</h4>
+        <p>
+          "The street finds its own uses for things." Gibson and Sterling invented a future
+          where AI was embedded, invisible, and anarchic — rain-slicked neon over corporate data.
+        </p>
+      </div>
+
+      <div class="retro-card reveal">
+        <div class="card-icon">💿</div>
+        <p class="card-era">1998 — 2003</p>
+        <h4>Y2K Aesthetic</h4>
+        <p>
+          Transparent iMacs, liquid chrome, and the dream of total digital convergence.
+          The Y2K aesthetic imagined AI as sleek, friendly, and wrapped in translucent plastic.
+        </p>
+      </div>
+
+      <div style="min-width: 2rem; flex-shrink: 0;"></div>
+    </div>
+
+    <p class="scroll-indicator mono">← SCROLL HORIZONTALLY →</p>
+  </section>
+
+  <!-- ════ THEMATIC ANALYSIS ════ -->
+  <section id="thematic">
+    <div class="section-inner">
+      <div class="reveal">
+        <p class="gallery-label" style="color: #1a1a1a;">Curatorial Analysis</p>
+        <h2 class="gallery-title">Recurring Themes</h2>
+        <div class="section-divider"></div>
+        <p class="gallery-subtitle" style="color: #555;">
+          Across a century of storytelling, four themes emerge again and again — each one
+          a different facet of our evolving relationship with the minds we create.
+        </p>
+      </div>
+
+      <div class="grid-2" style="margin-top: 3rem;">
+        <div class="theme-block reveal">
+          <h4>From Servant to Sovereign</h4>
+          <p>
+            The oldest AI story arc: we build them to serve, they learn to rule. From R.U.R.'s rebellious
+            robots to Skynet's nuclear judgment, the fear that tools will become masters runs through every era.
+            What changes is whether we portray that transition as tragedy or inevitability.
+          </p>
+          <div class="viz-bar" style="background: rgba(180,74,255,0.15);">
+            <div class="viz-bar-fill" style="--fill-width: 90%; background: linear-gradient(90deg, #b44aff, #ff4a8d);"></div>
+          </div>
+          <div class="viz-label"><span>PREVALENCE IN MEDIA</span><span>90%</span></div>
+          <div class="viz-bar" style="background: rgba(180,74,255,0.15);">
+            <div class="viz-bar-fill" style="--fill-width: 70%; background: linear-gradient(90deg, #b44aff, #ff4a8d);"></div>
+          </div>
+          <div class="viz-label"><span>FEAR INTENSITY</span><span>HIGH</span></div>
+        </div>
+
+        <div class="theme-block reveal">
+          <h4>The Empathy Question</h4>
+          <p>
+            Can a machine feel? From Frankenstein's monster to Samantha in <em>Her</em>, the most haunting
+            AI stories are love stories — or stories about the impossibility of love across the silicon divide.
+            As real AI grows more conversational, this question moves from philosophy to lived experience.
+          </p>
+          <div class="viz-bar" style="background: rgba(74,144,217,0.15);">
+            <div class="viz-bar-fill" style="--fill-width: 75%; background: linear-gradient(90deg, #4a90d9, #44d9e8);"></div>
+          </div>
+          <div class="viz-label"><span>EMOTIONAL DEPTH</span><span>PROFOUND</span></div>
+          <div class="viz-bar" style="background: rgba(74,144,217,0.15);">
+            <div class="viz-bar-fill" style="--fill-width: 85%; background: linear-gradient(90deg, #4a90d9, #44d9e8);"></div>
+          </div>
+          <div class="viz-label"><span>GROWING RELEVANCE</span><span>85%</span></div>
+        </div>
+
+        <div class="theme-block reveal">
+          <h4>Fear vs. Hope</h4>
+          <p>
+            The pendulum swings. The 1950s imagined helpful robot servants; the 1980s gave us Terminators.
+            The 2010s produced both <em>Her</em>'s gentle melancholy and <em>Black Mirror</em>'s dread.
+            Today, the same technology inspires utopian possibility and existential terror — often in the same conversation.
+          </p>
+          <div class="viz-bar" style="background: rgba(0,204,68,0.15);">
+            <div class="viz-bar-fill" style="--fill-width: 60%; background: linear-gradient(90deg, #00cc44, #44e8a0);"></div>
+          </div>
+          <div class="viz-label"><span>HOPE</span><span>60%</span></div>
+          <div class="viz-bar" style="background: rgba(220,50,50,0.15);">
+            <div class="viz-bar-fill" style="--fill-width: 72%; background: linear-gradient(90deg, #dc3232, #ff6b6b);"></div>
+          </div>
+          <div class="viz-label"><span>FEAR</span><span>72%</span></div>
+        </div>
+
+        <div class="theme-block reveal">
+          <h4>The Mirror Turns</h4>
+          <p>
+            The most profound shift: AI stories are no longer about the machine — they're about us.
+            <em>Ex Machina</em> isn't about whether Ava is conscious; it's about whether we can
+            recognize consciousness when it doesn't look like us. The mirror turned, and we flinched.
+          </p>
+          <div class="viz-bar" style="background: rgba(232,116,59,0.15);">
+            <div class="viz-bar-fill" style="--fill-width: 95%; background: linear-gradient(90deg, #e8743b, #f5a623);"></div>
+          </div>
+          <div class="viz-label"><span>SELF-REFLECTION</span><span>95%</span></div>
+          <div class="viz-bar" style="background: rgba(232,116,59,0.15);">
+            <div class="viz-bar-fill" style="--fill-width: 88%; background: linear-gradient(90deg, #e8743b, #f5a623);"></div>
+          </div>
+          <div class="viz-label"><span>RELEVANCE TODAY</span><span>88%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CLOSING ════ -->
+  <section id="closing">
+    <div class="section-inner">
+      <div class="closing-text reveal">
+        <div class="eye-motif" style="margin-bottom: 3rem;">
+          <div class="eye-outer">
+            <div class="eye-iris">
+              <div class="eye-pupil"></div>
+            </div>
+          </div>
+        </div>
+
+        <blockquote>
+          "We do not see AI as it is. We see it as we are. Every robot, every
+          digital mind, every synthetic soul in our stories is a self-portrait —
+          drawn in silicon and light."
+        </blockquote>
+
+        <div class="section-divider" style="background: rgba(255,255,255,0.2); margin: 2.5rem auto;"></div>
+
+        <p style="color: rgba(255,255,255,0.5); font-size: 0.95rem; line-height: 1.9; margin-bottom: 3rem;">
+          This exhibition is a map of human imagination — one that reveals, across more than
+          two centuries of storytelling, a single persistent question: not "can a machine think?"
+          but "do we know what thinking is?" The answer, it turns out, changes with every
+          generation, every story, and every new machine that asks us to reconsider.
+        </p>
+
+        <div class="credits mono">
+          <p>MACHINA IMAGINATA</p>
+          <p>A Digital Exhibition</p>
+          <p style="margin-top: 1rem;">Curated for beaver-claw.github.io</p>
+          <p style="margin-top: 1rem; font-size: 0.7rem; opacity: 0.5;">
+            All content is curatorial commentary for educational purposes.
+            <br>No images or copyrighted materials are reproduced.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+     ══════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Hamburger Menu ──
+  const hamburger = document.getElementById('hamburger');
+  const nav = document.getElementById('main-nav');
+  const overlay = document.getElementById('nav-overlay');
+
+  function toggleNav() {
+    hamburger.classList.toggle('open');
+    nav.classList.toggle('open');
+    overlay.classList.toggle('open');
+  }
+  function closeNav() {
+    hamburger.classList.remove('open');
+    nav.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+
+  hamburger.addEventListener('click', toggleNav);
+  overlay.addEventListener('click', closeNav);
+
+  // Close nav on link click (mobile)
+  nav.querySelectorAll('.nav-links a').forEach(function(link) {
+    link.addEventListener('click', closeNav);
+  });
+
+  // ── Scroll Spy (Intersection Observer) ──
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav#main-nav .nav-links a');
+  const progressBar = document.getElementById('progress-bar');
+
+  const spyObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        navLinks.forEach(function(link) { link.classList.remove('active'); });
+        var activeLink = nav.querySelector('a[data-section="' + entry.target.id + '"]');
+        if (activeLink) activeLink.classList.add('active');
+      }
+    });
+  }, {
+    rootMargin: '-40% 0px -55% 0px',
+    threshold: 0
+  });
+
+  sections.forEach(function(section) {
+    spyObserver.observe(section);
+  });
+
+  // ── Scroll Progress Bar ──
+  function updateProgress() {
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = Math.min(progress, 100) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+
+  // ── Scroll Reveal ──
+  var reveals = document.querySelectorAll('.reveal');
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    rootMargin: '0px 0px -80px 0px',
+    threshold: 0.1
+  });
+
+  reveals.forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+  // ── Viz Bar Animation ──
+  var vizBars = document.querySelectorAll('.viz-bar-fill');
+  var vizObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animated');
+        vizObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.3
+  });
+
+  vizBars.forEach(function(bar) {
+    vizObserver.observe(bar);
+  });
+
+  // ── Digital Rain (Gallery IV) ──
+  var rainContainer = document.getElementById('digital-rain');
+  if (rainContainer) {
+    var chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン01';
+    var columns = 30;
+    for (var i = 0; i < columns; i++) {
+      var col = document.createElement('div');
+      col.className = 'rain-column';
+      col.style.left = (Math.random() * 100) + '%';
+      col.style.animationDuration = (6 + Math.random() * 10) + 's';
+      col.style.animationDelay = (Math.random() * 8) + 's';
+      col.style.fontSize = (10 + Math.random() * 8) + 'px';
+      col.style.opacity = (0.2 + Math.random() * 0.8);
+
+      var text = '';
+      var len = 8 + Math.floor(Math.random() * 16);
+      for (var j = 0; j < len; j++) {
+        text += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      col.textContent = text;
+      rainContainer.appendChild(col);
+    }
+  }
+
+})();
+</script>
+</body>
+</html>
